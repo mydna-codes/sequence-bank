@@ -4,6 +4,11 @@
 
         <non-jta-data-source>jdbc/sequence-bank-db</non-jta-data-source>
 
+        <class>codes.mydna.entities.DnaEntity</class>
+        <class>codes.mydna.entities.GeneEntity</class>
+        <class>codes.mydna.entities.EnzymeEntity</class>
+        <class>codes.mydna.entities.SequenceEntity</class>
+
         <properties>
             <property name="javax.persistence.schema-generation.create-source" value="metadata"/>
             <property name="javax.persistence.schema-generation.drop-source" value="metadata"/>

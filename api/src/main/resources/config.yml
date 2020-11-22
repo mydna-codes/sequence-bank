@@ -29,7 +29,7 @@ kumuluzee:
         type: liveness
   datasources:
     - jndi-name: jdbc/sequence-bank-db
-      connection-url: jdbc:postgresql://localhost:5432/sequence-bank
+      connection-url: jdbc:postgresql://localhost:60000/sequence-bank
       username: postgres
       password: postgres
       pool:

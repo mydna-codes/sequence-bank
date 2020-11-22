@@ -19,6 +19,10 @@
             <groupId>codes.mydna</groupId>
             <artifactId>entities</artifactId>
         </dependency>
+        <dependency>
+            <groupId>codes.mydna</groupId>
+            <artifactId>sequence-bank-lib</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.kumuluz.ee</groupId>
@@ -43,6 +47,10 @@
         <dependency>
             <groupId>com.kumuluz.ee</groupId>
             <artifactId>kumuluzee-json-b-yasson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>codes.mydna</groupId>
+            <artifactId>rest-lib</artifactId>
         </dependency>
     </dependencies>
 

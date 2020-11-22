@@ -36,5 +36,5 @@ docker run -d -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRE
 
 Run docker image (change `<PORT>`):
 ```bash
-docker run -d -p <PORT>:8080 -e KUMULUZEE_DATASOURCES0_CONNECTIONURL=jdbc:postgresql://sequence-bank-db:5432/sequence-bank -e KUMULUZEE_DATASOURCES0_USERNAME=postgres -e KUMULUZEE_DATASOURCES0_PASSWORD=postgres --network sequence-bank-network --name sequence-bank-service sequence-bank
+docker run -d -p <PORT>:8080 -e KUMULUZEE_DATASOURCES0_CONNECTIONURL=jdbc:postgresql://sequence-bank-db:60000/sequence-bank -e KUMULUZEE_DATASOURCES0_USERNAME=postgres -e KUMULUZEE_DATASOURCES0_PASSWORD=postgres --network sequence-bank-network --name sequence-bank-service sequence-bank
 ```
