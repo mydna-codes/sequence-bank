@@ -30,6 +30,7 @@ script:
 after_success:
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
   - docker push "$DOCKER_IMAGE_NAME"
+  - mvn clean deploy -DskipTests=true --settings .ci/settings.xml -P lib
 
 notifications:
   email: false

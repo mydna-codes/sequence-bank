@@ -28,7 +28,7 @@
         <postgresql.version>42.2.18</postgresql.version>
 
         <!-- Custom -->
-        <rest-lib.version>1.0.0-SNAPSHOT</rest-lib.version>
+        <mydnacodes-rest-lib.version>1.0.0</mydnacodes-rest-lib.version>
     </properties>
 
     <dependencyManagement>
@@ -110,7 +110,7 @@
             <dependency>
                 <groupId>codes.mydna</groupId>
                 <artifactId>rest-lib</artifactId>
-                <version>${rest-lib.version}</version>
+                <version>${mydnacodes-rest-lib.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -135,7 +135,6 @@
                 <module>lib</module>
             </modules>
         </profile>
-
         <profile>
             <id>lib</id>
             <modules>
