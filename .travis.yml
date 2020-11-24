@@ -37,7 +37,7 @@ notifications:
   email: false
   slack:
     rooms:
-      - "$SLACK_ROOM"
+      - mydnacodes:2aXZWSXfUxDEKC64jl9rugZe#travis-ci
     on_success: always
     on_failure: always
     template:
