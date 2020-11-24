@@ -1,19 +1,18 @@
-os:
-  - linux
+os: linux
+dist: focal
 
 env:
   - IMAGE_VERSION="latest"
-
-services:
-  - docker
-
-language: java
-dist: trusty
 
 branches:
   only:
     - master
     - prod
+
+services:
+  - docker
+
+language: java
 
 jdk:
   - openjdk13
