@@ -1,4 +1,4 @@
-FROM openjdk:11-jre-slim
+FROM openjdk:13-jre-slim
 
 ENV JAVA_ENV=DEVELOPMENT
 ENV KUMULUZEE_ENV_NAME=dev
