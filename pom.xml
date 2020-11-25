@@ -24,8 +24,11 @@
         <kumuluzee-security.version>1.2.0</kumuluzee-security.version>
         <kumuluzee-health.version>2.3.0</kumuluzee-health.version>
 
-        <!-- PostgreSQL-->
+        <!-- PostgreSQL -->
         <postgresql.version>42.2.18</postgresql.version>
+
+        <!-- Liquibase -->
+        <liquibase.version>4.2.0</liquibase.version>
 
         <!-- Custom -->
         <mydnacodes-rest-lib.version>1.0.1</mydnacodes-rest-lib.version>
@@ -104,6 +107,12 @@
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
                 <version>${postgresql.version}</version>
+            </dependency>
+            <!-- Liquibase -->
+            <dependency>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-core</artifactId>
+                <version>${liquibase.version}</version>
             </dependency>
 
             <!-- Nexus - REST lib -->

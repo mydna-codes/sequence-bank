@@ -29,8 +29,11 @@ kumuluzee:
         type: liveness
   datasources:
     - jndi-name: jdbc/sequence-bank-db
-      connection-url: jdbc:postgresql://localhost:60000/sequence-bank
+      connection-url: jdbc:postgresql://localhost:65432/sequence-bank
       username: postgres
       password: postgres
       pool:
         max-size: 20
+
+liquibase:
+  master-changelog: db/db.changelog-master.xml
