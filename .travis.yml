@@ -15,7 +15,7 @@ services:
 language: java
 
 jdk:
-  - openjdk13
+  - openjdk11
 
 cache:
   directories:
