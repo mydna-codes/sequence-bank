@@ -28,7 +28,7 @@
         <postgresql.version>42.2.18</postgresql.version>
 
         <!-- Custom -->
-        <mydnacodes-rest-lib.version>1.0.0</mydnacodes-rest-lib.version>
+        <mydnacodes-rest-lib.version>1.0.1</mydnacodes-rest-lib.version>
     </properties>
 
     <dependencyManagement>
