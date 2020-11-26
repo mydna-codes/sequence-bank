@@ -6,6 +6,6 @@
 
     <!-- Startup listener - Executes liquibase:update -->
     <listener>
-        <listener-class>codes.mydna.api.listeners.LiquibaseStartupListener</listener-class>
+        <listener-class>codes.mydna.api.listeners.StartupListener</listener-class>
     </listener>
 </web-app>

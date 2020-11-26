@@ -9,21 +9,21 @@ import javax.servlet.ServletContextListener;
 import java.util.logging.Logger;
 
 @ApplicationScoped
-public class LiquibaseStartupListener implements ServletContextListener {
+public class StartupListener implements ServletContextListener {
 
-    private Logger LOG = Logger.getLogger(LiquibaseStartupListener.class.getSimpleName());
+    private Logger LOG = Logger.getLogger(StartupListener.class.getSimpleName());
 
     @Inject
     private LiquibaseInitializer liquibaseInitializer;
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        LOG.info("Liquibase startup context initialized.");
+        LOG.info("Startup listener initialized.");
         liquibaseInitializer.initialize();
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
-        LOG.info("Liquibase startup context destroyed.");
+        LOG.info("Startup listener destroyed.");
     }
 }

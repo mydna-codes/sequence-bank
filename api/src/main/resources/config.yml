@@ -36,4 +36,10 @@ kumuluzee:
         max-size: 20
 
 liquibase:
-  master-changelog: db/db.changelog-master.xml
+  datasources:
+    - jndi-name: jdbc/sequence-bank-db
+      changelog: db/db.changelog-master.xml
+      enabled: true
+      startup:
+        dropAll: true
+        update: true
