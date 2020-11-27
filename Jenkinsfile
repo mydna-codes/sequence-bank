@@ -19,8 +19,6 @@ pipeline {
     stages {
         stage("Cloning git") {
             steps {
-                sh "echo test"
-                sh "mvn -v"
                 git branch: "master",
                     credentialsId: "github",
                     url: "https://github.com/mydna-codes/sequence-bank.git"
@@ -31,6 +29,8 @@ pipeline {
                 script {
                     pom = readMavenPom file:"pom.xml"
                     version = pom.version
+                    sh "git --no-pager show -s --format='%ae' > COMMIT_INFO"
+                    commitAuthor = readFile("COMMIT_INFO").trim()
                 }
             }
         }
@@ -69,6 +69,13 @@ pipeline {
                }
            }
        }
-
+       post {
+           success {
+               slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' from ${commitAuthor} (${env.BUILD_URL})")
+           }
+           failure {
+               slackSend (color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' from ${commitAuthor} (${env.BUILD_URL})")
+           }
+       }
     }
 }
