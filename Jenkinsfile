@@ -12,7 +12,7 @@ pipeline {
     }
 
     tools {
-        maven "mvn-3.6"
+        maven "mvn-3.6.3"
         jdk "jdk-11"
     }
 
