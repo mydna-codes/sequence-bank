@@ -19,6 +19,7 @@ pipeline {
     stages {
         stage("Cloning git") {
             steps {
+                sh "echo test"
                 sh "mvn -v"
                 git branch: "master",
                     credentialsId: "github",
