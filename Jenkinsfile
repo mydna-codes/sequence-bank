@@ -3,8 +3,8 @@ pipeline {
     agent any
 
     environment {
-        dockerCredentials = "mydnacodes-docker"
-        nexusCredentials = "mydnacodes-nexus"
+        dockerCredentials = "mydnacodes-docker-user"
+        nexusCredentials = "mydnacodes-nexus-user"
         dockerImageTag = "mydnacodes/sequence-bank"
         dockerImage = ""
         version = ""
