@@ -19,6 +19,7 @@ pipeline {
     stages {
         stage("Cloning git") {
             steps {
+                sh "mvn -v"
                 git branch: "master",
                     credentialsId: "github",
                     url: "https://github.com/mydna-codes/sequence-bank.git"
