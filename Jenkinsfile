@@ -29,8 +29,6 @@ pipeline {
                 script {
                     pom = readMavenPom file:"pom.xml"
                     version = pom.version
-                    sh "git --no-pager show -s --format='%ae' > COMMIT_INFO"
-                    commitAuthor = readFile("COMMIT_INFO").trim()
                 }
             }
         }
