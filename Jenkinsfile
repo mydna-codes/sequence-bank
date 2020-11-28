@@ -3,7 +3,7 @@ pipeline {
     agent any
 
     environment {
-        kubeconfigId = "kubernetes-kubeconfig"
+        kubernetesCredentials = "k8s-kubeconfig"
         nexusCredentials = "mydnacodes-nexus-user"
         dockerCredentials = "mydnacodes-docker-user"
         dockerImageTag = "mydnacodes/sequence-bank"
@@ -72,7 +72,7 @@ pipeline {
         }
         stage("Deploying application") {
             steps {
-                withKubeConfig([credentialsId: kubeconfigId]) {
+                withKubeConfig([credentialsId: kubernetesCredentials]) {
                     sh 'kubectl get pods'
                 }
             }
