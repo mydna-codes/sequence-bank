@@ -72,10 +72,14 @@ pipeline {
         }
         stage("Deploying application") {
             steps {
-                kubernetesDeploy(kubeconfigId: kubeconfigId,
-                                 configs: '.kube/sequence-bank-db.yaml,.kube/sequence-bank.yaml',
-                                 enableConfigSubstitution: true,
-                )
+                withKubeConfig([credentialsId: '<credential-id>']) {
+                    sh 'kubectl get pods'
+                }
+            }
+        }
+        stage("Cleaning maven packages") {
+            steps {
+                sh "mvn clean"
             }
         }
     }
