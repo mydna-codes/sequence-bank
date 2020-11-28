@@ -72,7 +72,7 @@ pipeline {
         }
         stage("Deploying application") {
             steps {
-                withKubeConfig([credentialsId: '<credential-id>']) {
+                withKubeConfig([credentialsId: kubeconfigId]) {
                     sh 'kubectl get pods'
                 }
             }
