@@ -70,10 +70,12 @@ pipeline {
                }
            }
         }
-        stage("Deploying application") {
-            steps {
-                withKubeConfig([credentialsId: kubernetesCredentials]) {
-                    sh 'kubectl get pods'
+        node {
+            stage("Deploying application") {
+                steps {
+                    withKubeConfig([credentialsId: kubernetesCredentials]) {
+                        sh 'kubectl get pods'
+                    }
                 }
             }
         }
