@@ -3,8 +3,9 @@ pipeline {
     agent any
 
     environment {
-        dockerCredentials = "mydnacodes-docker-user"
+        kubeconfigId = "kubernetes-kubeconfig"
         nexusCredentials = "mydnacodes-nexus-user"
+        dockerCredentials = "mydnacodes-docker-user"
         dockerImageTag = "mydnacodes/sequence-bank"
         dockerImage = ""
         version = ""
@@ -68,14 +69,22 @@ pipeline {
                    sh "mvn clean deploy -DskipTests=true -Dnexus.username=$USERNAME -Dnexus.password=$PASSWORD --settings .ci/settings.xml -P lib"
                }
            }
-       }
+        }
+        stage("Deploying application") {
+            steps {
+                kubernetesDeploy(kubeconfigId: kubeconfigId,
+                                 configs: '.kube/sequence-bank-db.yaml,.kube/sequence-bank.yaml',
+                                 enableConfigSubstitution: true,
+                )
+            }
+        }
     }
     post {
        success {
-           slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' from ${commitAuthor} (${env.BUILD_URL})")
+           slackSend (color: '#57BA57', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' from ${commitAuthor} (${env.BUILD_URL})")
        }
        failure {
-           slackSend (color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' from ${commitAuthor} (${env.BUILD_URL})")
+           slackSend (color: '#BD0808', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' from ${commitAuthor} (${env.BUILD_URL})")
        }
     }
 }
