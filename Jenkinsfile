@@ -3,7 +3,7 @@ pipeline {
     agent any
 
     environment {
-        kubernetesCredentials = "k8s-kubeconfig"
+        kubernetesCredentials = "kubernetes-kubeconfig"
         nexusCredentials = "mydnacodes-nexus-user"
         dockerCredentials = "mydnacodes-docker-user"
         dockerImageTag = "mydnacodes/sequence-bank"
