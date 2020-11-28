@@ -70,16 +70,16 @@ pipeline {
                }
            }
         }
-        stage("Deploying application") {
-            steps {
-                withKubeConfig([credentialsId: kubernetesCredentials]) {
-                    sh 'kubectl get pods'
-                }
-            }
-        }
         stage("Cleaning maven packages") {
             steps {
                 sh "mvn clean"
+            }
+        }
+        stage("Deploying application") {
+            steps {
+                withKubeConfig([credentialsId: kubernetesCredentials]) {
+                    sh "kubectl apply -f .kube/"
+                }
             }
         }
     }
