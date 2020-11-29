@@ -37,12 +37,9 @@ pipeline {
                     pom                  = readMavenPom file:"pom.xml"
                     DOCKER_IMAGE_VERSION = pom.version
 
-                    COMMIT_AUTHOR  = "$(git show -s --format='%cn <%ce>')"
-                    COMMIT_MESSAGE = $(git show -s --format='%s')
+                    COMMIT_AUTHOR  = sh "git show -s --format='%cn <%ce>')"
+                    COMMIT_MESSAGE = sh "git show -s --format='%s')"
                 }
-
-                COMMIT_AUTHOR  = sh "$(git show -s --format='%cn <%ce>')"
-                COMMIT_MESSAGE = sh "$(git show -s --format='%s')"
             }
         }
         stage("Package application") {
