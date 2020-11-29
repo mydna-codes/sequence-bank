@@ -3,13 +3,15 @@ pipeline {
     agent any
 
     environment {
+        // Variables from Jenkins
         kubernetesCredentials = "k8s-kubeconfig"
-        nexusCredentials = "mydnacodes-nexus-user"
-        dockerCredentials = "mydnacodes-docker-user"
+        nexusCredentials      = "mydnacodes-nexus-user"
+        dockerCredentials     = "mydnacodes-docker-user"
+        // Local variables
         dockerImageTag = "mydnacodes/sequence-bank"
-        dockerImage = ""
-        version = ""
-        commitAuthor = ""
+        dockerImage    = ""
+        version        = ""
+        commitAuthor   = ""
     }
 
     tools {
@@ -18,7 +20,7 @@ pipeline {
     }
 
     stages {
-        stage("Cloning git") {
+        stage("Clone git") {
             steps {
                 git branch: "master",
                     credentialsId: "github",
@@ -35,19 +37,19 @@ pipeline {
                 }
             }
         }
-        stage("Packaging application") {
+        stage("Package application") {
             steps {
                 sh "mvn clean package -DskipTests=true"
             }
         }
-        stage("Building docker image") {
+        stage("Build docker image") {
             steps {
                 script {
                     dockerImage = docker.build dockerImageTag
                 }
             }
         }
-        stage("Publishing docker image") {
+        stage("Publish docker image") {
             steps {
                 script {
                     docker.withRegistry("", dockerCredentials) {
@@ -57,26 +59,28 @@ pipeline {
                 }
             }
         }
-        stage("Cleaning up docker images") {
+        stage("Clean docker images") {
             steps {
                 sh "docker rmi $dockerImageTag:$version"
                 sh "docker rmi $dockerImageTag:latest"
             }
         }
-        stage("Deploying libraries") {
+        stage("Deploy libraries") {
            steps {
                withCredentials([usernamePassword(credentialsId: nexusCredentials, passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
                    sh "mvn clean deploy -DskipTests=true -Dnexus.username=$USERNAME -Dnexus.password=$PASSWORD --settings .ci/settings.xml -P lib"
                }
            }
         }
-        stage("Cleaning maven packages") {
+        stage("Clean maven packages") {
             steps {
                 sh "mvn clean"
             }
         }
-        stage("Deploying application") {
+        stage("Deploy application") {
             steps {
+                sh "sed 's/{{IMAGE_NAME}}/$dockerImageTag:$version/g' .kube/sequence-bank.yaml"
+
                 withKubeConfig([credentialsId: kubernetesCredentials]) {
                     sh "kubectl apply -f .kube/"
                 }
