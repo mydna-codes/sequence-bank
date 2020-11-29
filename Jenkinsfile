@@ -79,7 +79,7 @@ pipeline {
         }
         stage("Deploy application") {
             steps {
-                sh "sed 's/{{IMAGE_NAME}}/$dockerImageTag:$version/g' .kube/sequence-bank.yaml"
+                sh "sed 's+{{IMAGE_NAME}}+$dockerImageTag:$version+g' .kube/sequence-bank.yaml"
 
                 withKubeConfig([credentialsId: kubernetesCredentials]) {
                     sh "kubectl apply -f .kube/"
