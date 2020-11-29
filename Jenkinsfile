@@ -38,10 +38,8 @@ pipeline {
                 script {
                     pom                  = readMavenPom file:"pom.xml"
                     DOCKER_IMAGE_VERSION = pom.version
-
-
-                    COMMIT_AUTHOR  = sh script: "git show -s --pretty='%cn <%ce>'", returnStdout: true
-                    COMMIT_MESSAGE = sh script: "git show -s --pretty='%s'", returnStdout: true
+                    COMMIT_AUTHOR        = sh script: "git show -s --pretty='%cn <%ce>'", returnStdout: true
+                    COMMIT_MESSAGE       = sh script: "git show -s --pretty='%s'", returnStdout: true
                 }
             }
         }
@@ -97,10 +95,10 @@ pipeline {
     }
     post {
        success {
-           slackSend (color: '#57BA57', message: "[<${env.BUILD_URL}|Build ${env.BUILD_NUMBER}>] *SUCCESSFUL*\n\nJob: *${env.JOB_NAME}*\nBranch: ${COMMIT_BRANCH}\nCommit author:${COMMIT_AUTHOR}\nCommit message: ${COMMIT_MESSAGE}")
+           slackSend (color: '#57BA57', message: "[<${env.BUILD_URL}|Build ${env.BUILD_NUMBER}>] *SUCCESSFUL*\n\nJob: *${env.JOB_NAME}*\nBranch: ${COMMIT_BRANCH}\nCommit author:${COMMIT_AUTHOR}Commit message: ${COMMIT_MESSAGE}")
        }
        failure {
-           slackSend (color: '#BD0808', message: "[<${env.BUILD_URL}|Build ${env.BUILD_NUMBER}>] *FAILED*\n\nJob: *${env.JOB_NAME}*\nBranch: ${COMMIT_BRANCH}\nCommit author:${COMMIT_AUTHOR}\nCommit message: ${COMMIT_MESSAGE}")
+           slackSend (color: '#BD0808', message: "[<${env.BUILD_URL}|Build ${env.BUILD_NUMBER}>] *FAILED*\n\nJob: *${env.JOB_NAME}*\nBranch: ${COMMIT_BRANCH}Commit author:${COMMIT_AUTHOR}\nCommit message: ${COMMIT_MESSAGE}")
        }
     }
 }
