@@ -1,7 +1,3 @@
-def dockerImageVersion = "not_set"
-def dockerImageTag     = "mydnacodes/sequence-bank"
-def dockerImage        = "not_set"
-
 pipeline {
 
     agent any
@@ -16,6 +12,8 @@ pipeline {
         DOCKER_IMAGE_VERSION   = ""
         DOCKER_IMAGE           = ""
         COMMIT_AUTHOR          = ""
+        COMMIT_MESSAGE         = ""
+        COMMIT_BRANCH          = ""
     }
 
     tools {
@@ -26,7 +24,9 @@ pipeline {
     stages {
         stage("Clone git") {
             steps {
-                git branch: "${GIT_BRANCH.split("/")[1]}",
+                COMMIT_BRANCH = "${GIT_BRANCH.split("/")[1]}"
+
+                git branch: COMMIT_BRANCH,
                     credentialsId: "github",
                     url: "https://github.com/mydna-codes/sequence-bank.git"
             }
@@ -34,11 +34,12 @@ pipeline {
         stage("Set environment variables") {
             steps {
                 script {
-                    pom = readMavenPom file:"pom.xml"
+                    pom                  = readMavenPom file:"pom.xml"
                     DOCKER_IMAGE_VERSION = pom.version
-                    sh "git --no-pager show -s --format='%ae' > COMMIT_INFO"
-                    COMMIT_AUTHOR = readFile("COMMIT_INFO").trim()
                 }
+
+                COMMIT_AUTHOR  = "$(git show -s --format='%cn <%ce>')"
+                COMMIT_MESSAGE = "$(git show -s --format='%s')"
             }
         }
         stage("Package application") {
@@ -93,10 +94,10 @@ pipeline {
     }
     post {
        success {
-           slackSend (color: '#57BA57', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' from ${COMMIT_AUTHOR} (${env.BUILD_URL})")
+           slackSend (color: '#57BA57', message: "[<${env.BUILD_URL}|Build ${env.BUILD_NUMBER}>] *SUCCESSFUL*\n\nJob: *${env.JOB_NAME}*\nBranch: ${COMMIT_BRANCH}\nCommit author:${COMMIT_AUTHOR}\nCommit message: ${COMMIT_MESSAGE}")
        }
        failure {
-           slackSend (color: '#BD0808', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' from ${COMMIT_AUTHOR} (${env.BUILD_URL})")
+           slackSend (color: '#BD0808', message: "[<${env.BUILD_URL}|Build ${env.BUILD_NUMBER}>] *FAILED*\n\nJob: *${env.JOB_NAME}*\nBranch: ${COMMIT_BRANCH}\nCommit author:${COMMIT_AUTHOR}\nCommit message: ${COMMIT_MESSAGE}")
        }
     }
 }
