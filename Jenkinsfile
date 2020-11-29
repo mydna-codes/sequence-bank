@@ -1,3 +1,7 @@
+def dockerImageVersion = "not_set"
+def dockerImageTag     = "mydnacodes/sequence-bank"
+def dockerImage        = "not_set"
+
 pipeline {
 
     agent any
@@ -22,7 +26,7 @@ pipeline {
     stages {
         stage("Clone git") {
             steps {
-                git branch: "$BRANCH_NAME",
+                git branch: "${GIT_BRANCH.split("/")[1]}",
                     credentialsId: "github",
                     url: "https://github.com/mydna-codes/sequence-bank.git"
             }
@@ -33,7 +37,7 @@ pipeline {
                     pom = readMavenPom file:"pom.xml"
                     DOCKER_IMAGE_VERSION = pom.version
                     sh "git --no-pager show -s --format='%ae' > COMMIT_INFO"
-                    commitAuthor = readFile("COMMIT_INFO").trim()
+                    COMMIT_AUTHOR = readFile("COMMIT_INFO").trim()
                 }
             }
         }
@@ -89,10 +93,10 @@ pipeline {
     }
     post {
        success {
-           slackSend (color: '#57BA57', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' from ${commitAuthor} (${env.BUILD_URL})")
+           slackSend (color: '#57BA57', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' from ${COMMIT_AUTHOR} (${env.BUILD_URL})")
        }
        failure {
-           slackSend (color: '#BD0808', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' from ${commitAuthor} (${env.BUILD_URL})")
+           slackSend (color: '#BD0808', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' from ${COMMIT_AUTHOR} (${env.BUILD_URL})")
        }
     }
 }
