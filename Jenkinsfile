@@ -39,8 +39,9 @@ pipeline {
                     pom                  = readMavenPom file:"pom.xml"
                     DOCKER_IMAGE_VERSION = pom.version
 
-                    COMMIT_AUTHOR  = sh "git show -s --format='%cn <%ce>'"
-                    COMMIT_MESSAGE = sh "git show -s --format='%s'"
+
+                    COMMIT_AUTHOR  = sh script: "git show -s --pretty='%cn <%ce>'", returnStdout: true
+                    COMMIT_MESSAGE = sh script: "git show -s --pretty='%s'", returnStdout: true
                 }
             }
         }
