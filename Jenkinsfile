@@ -24,7 +24,9 @@ pipeline {
     stages {
         stage("Clone git") {
             steps {
-                COMMIT_BRANCH = "${GIT_BRANCH.split("/")[1]}"
+                script {
+                    COMMIT_BRANCH = "${GIT_BRANCH.split("/")[1]}"
+                }
 
                 git branch: COMMIT_BRANCH,
                     credentialsId: "github",
@@ -37,8 +39,8 @@ pipeline {
                     pom                  = readMavenPom file:"pom.xml"
                     DOCKER_IMAGE_VERSION = pom.version
 
-                    COMMIT_AUTHOR  = sh "git show -s --format='%cn <%ce>')"
-                    COMMIT_MESSAGE = sh "git show -s --format='%s')"
+                    COMMIT_AUTHOR  = sh "git show -s --format='%cn <%ce>'"
+                    COMMIT_MESSAGE = sh "git show -s --format='%s'"
                 }
             }
         }
