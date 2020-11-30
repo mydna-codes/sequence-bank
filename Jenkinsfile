@@ -91,6 +91,7 @@ pipeline {
                         .kube/sequence-bank.yaml > .kube/sequence-bank.tmp
                     """
                     sh "mv -f .kube/sequence-bank.tmp .kube/sequence-bank.yaml"
+                    sh "cat .kube/sequence-bank.yaml"
 
                     sh """ \
                     sed -e 's+{{DATABASE_PORT}}+$environment.dbPort+g' \
@@ -98,6 +99,7 @@ pipeline {
                         .kube/sequence-bank-db.yaml > .kube/sequence-bank-db.tmp
                     """
                     sh "mv -f .kube/sequence-bank-db.tmp .kube/sequence-bank-db.yaml"
+                    sh "cat .kube/sequence-bank-db.yaml"
                 }
             }
         }
