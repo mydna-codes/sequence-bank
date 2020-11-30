@@ -79,8 +79,10 @@ pipeline {
                     def dbPort           = deploymentConfig.environments.dev.dbPort
                     def servicePort      = deploymentConfig.environments.dev.servicePort
                     def namespace        = deploymentConfig.environments.dev.namespace
+                    sh "echo $servicePort"
                     sh "sed 's+{{IMAGE_NAME}}+$DOCKER_IMAGE_TAG:$DOCKER_IMAGE_VERSION+g' .kube/sequence-bank.yaml > .kube/sequence-bank.yaml"
                     sh "sed 's+{{SERVICE_PORT}}+$servicePort+g' .kube/sequence-bank.yaml > .kube/sequence-bank.yaml"
+                    sh "cat .kube/sequence-bank.yaml"
                 }
             }
         }
