@@ -5,5 +5,5 @@ environments:
     namespace: mydnacodes
   prod:
     dbPort: 15432
-    servicePort: 28080
+    servicePort: 18080
     namespace: mydnacodes-prod

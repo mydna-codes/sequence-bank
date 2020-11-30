@@ -75,7 +75,7 @@ pipeline {
         stage("Prepare test deployments") {
             when {
                 expression {
-                    return !(env.GIT_BRANCH.contains("prod") || env.GIT_BRANCH.contains("origin/prod"));
+                    return !(env.GIT_BRANCH.equals("prod") || env.GIT_BRANCH.equals("origin/prod"));
                 }
             }
             steps {
@@ -84,11 +84,14 @@ pipeline {
                     def dbPort           = deploymentConfig.environments.dev.dbPort
                     def servicePort      = deploymentConfig.environments.dev.servicePort
                     def namespace        = deploymentConfig.environments.dev.namespace
+
+                    sh "echo $namespace"
+
                     sh "sed 's+{{IMAGE_NAME}}+$DOCKER_IMAGE_TAG:$DOCKER_IMAGE_VERSION+g' .kube/sequence-bank.yaml > .kube/sequence-bank.yaml"
                     sh "sed 's+{{SERVICE_PORT}}+$servicePort+g' .kube/sequence-bank.yaml > .kube/sequence-bank.yaml"
-                    sh "sed 's+{{NAMESPACE}}+$namespace+g' .kube/sequence-bank.yaml > .kube/sequence-bank.yaml"
+                    sh "sed 's+{{NAMESPACE}}+mydnacodes+g' .kube/sequence-bank.yaml > .kube/sequence-bank.yaml"
                     sh "sed 's+{{DB_PORT}}+$dbPort+g' .kube/sequence-bank-db.yaml > .kube/sequence-bank-db.yaml"
-                    sh "sed 's+{{NAMESPACE}}+$namespace+g' .kube/sequence-bank-db.yaml > .kube/sequence-bank-db.yaml"
+                    sh "sed 's+{{NAMESPACE}}+mydnacodes+g' .kube/sequence-bank-db.yaml > .kube/sequence-bank-db.yaml"
                 }
             }
         }
