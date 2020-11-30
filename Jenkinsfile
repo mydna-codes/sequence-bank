@@ -84,18 +84,18 @@ pipeline {
                     def dbPort           = deploymentConfig.environments.dev.dbPort
                     def servicePort      = deploymentConfig.environments.dev.servicePort
                     def namespace        = deploymentConfig.environments.dev.namespace
-                    sh '''
-                    sed -e 's+{{IMAGE_NAME}}+$DOCKER_IMAGE_TAG:$DOCKER_IMAGE_VERSION+g'
-                        -e 's+{{SERVICE_PORT}}+$servicePort+g'
-                        -e 's+{{NAMESPACE}}+$namespace+g'
+                    sh """ \
+                    sed -e 's+{{IMAGE_NAME}}+$DOCKER_IMAGE_TAG:$DOCKER_IMAGE_VERSION+g' \
+                        -e 's+{{SERVICE_PORT}}+$servicePort+g' \
+                        -e 's+{{NAMESPACE}}+$namespace+g' \
                         .kube/sequence-bank.yaml > .kube/sequence-bank.tmp
-                    '''
+                    """
                     sh "mv -f .kube/sequence-bank.tmp .kube/sequence-bank.yaml"
-                    sh '''
-                    sed -e 's+{{DATABASE_PORT}}+$dbPort+g'
-                        -e 's+{{NAMESPACE}}+$namespace+g'
+                    sh """ \
+                    sed -e 's+{{DATABASE_PORT}}+$dbPort+g' \
+                        -e 's+{{NAMESPACE}}+$namespace+g' \
                         .kube/sequence-bank-db.yaml > .kube/sequence-bank-db.tmp
-                    '''
+                    """
                     sh "mv -f .kube/sequence-bank-db.tmp .kube/sequence-bank-db.yaml"
                 }
             }
