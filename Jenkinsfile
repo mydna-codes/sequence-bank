@@ -138,9 +138,3 @@ pipeline {
        }
     }
 }
-
-void replace(String old, String new, String file) {
-
-
-
-}
