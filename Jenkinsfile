@@ -78,7 +78,7 @@ pipeline {
                     def deploymentConfig = readYaml file: ".ci/deployment-config.yaml"
                     def env              = ""
 
-                    if (env.GIT_BRANCH.equals("prod") || env.GIT_BRANCH.equals("origin/prod") {
+                    if (env.GIT_BRANCH.equals("prod") || env.GIT_BRANCH.equals("origin/prod")) {
                         env = deploymentConfig.environments.prod
                     } else {
                         env = deploymentConfig.environments.dev
