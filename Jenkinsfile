@@ -75,7 +75,7 @@ pipeline {
         stage("Prepare test deployments") {
             when {
                 expression {
-                    return !${GIT_BRANCH}.contains("prod");
+                    return !(${GIT_BRANCH}.toString().contains("prod") || ${GIT_BRANCH}.toString().contains("origin/prod"));
                 }
             }
             steps {
