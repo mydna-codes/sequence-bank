@@ -87,7 +87,7 @@ pipeline {
                     sh "sed 's+{{IMAGE_NAME}}+$DOCKER_IMAGE_TAG:$DOCKER_IMAGE_VERSION+g' .kube/sequence-bank.yaml > .kube/sequence-bank.yaml"
                     sh "sed 's+{{SERVICE_PORT}}+$servicePort+g' .kube/sequence-bank.yaml > .kube/sequence-bank.yaml"
                     sh "sed 's+{{NAMESPACE}}+$namespace+g' .kube/sequence-bank.yaml > .kube/sequence-bank.yaml"
-                    //sh "sed 's+{{DB_PORT}}+$dbPort+g' .kube/sequence-bank-db.yaml > .kube/sequence-bank-db.yaml"
+                    sh "sed 's+{{DB_PORT}}+$dbPort+g' .kube/sequence-bank-db.yaml > .kube/sequence-bank-db.yaml"
                     //sh "sed 's+{{NAMESPACE}}+$namespace+g' .kube/sequence-bank-db.yaml > .kube/sequence-bank-db.yaml"
                 }
             }
