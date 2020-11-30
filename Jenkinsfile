@@ -76,9 +76,9 @@ pipeline {
             steps {
                 script {
                     def deploymentConfig = readYaml file: ".kube/deployment-config.yaml"
-                    def dbPort           = deploymentConfig.environment.dev.dbPort
-                    def servicePort      = deploymentConfig.environment.dev.servicePort
-                    def namespace        = deploymentConfig.environment.dev.namespace
+                    def dbPort           = deploymentConfig.environments.dev.dbPort
+                    def servicePort      = deploymentConfig.environments.dev.servicePort
+                    def namespace        = deploymentConfig.environments.dev.namespace
                     sh "sed 's+{{IMAGE_NAME}}+$DOCKER_IMAGE_TAG:$DOCKER_IMAGE_VERSION+g' .kube/sequence-bank.yaml > .kube/sequence-bank.yaml"
                     sh "sed 's+{{SERVICE_PORT}}+$servicePort+g' .kube/sequence-bank.yaml > .kube/sequence-bank.yaml"
                 }
