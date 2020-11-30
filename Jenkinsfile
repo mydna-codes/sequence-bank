@@ -75,7 +75,7 @@ pipeline {
         stage("Prepare deployments") {
             steps {
                 script {
-                    def deploymentConfig = readYaml file: ".kube/deployment-config.yaml"
+                    def deploymentConfig = readYaml file: ".ci/deployment-config.yaml"
                     def dbPort           = deploymentConfig.environments.dev.dbPort
                     def servicePort      = deploymentConfig.environments.dev.servicePort
                     def namespace        = deploymentConfig.environments.dev.namespace
