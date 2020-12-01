@@ -89,6 +89,7 @@ pipeline {
                     sh """ \
                     sed -e 's+{{IMAGE_NAME}}+$DOCKER_IMAGE_TAG:$DOCKER_IMAGE_VERSION+g' \
                         -e 's+{{SERVICE_PORT}}+$environment.servicePort+g' \
+                        -e 's+{{DATABASE_PORT}}+$environment.dbPort+g' \
                         -e 's+{{NAMESPACE}}+$environment.namespace+g' \
                         -e 's+{{ENV_SUFFIX}}+$envSuffix+g' \
                         .kube/sequence-bank.yaml > .kube/sequence-bank.tmp
@@ -99,7 +100,6 @@ pipeline {
                     sh """ \
                     sed -e 's+{{DATABASE_PORT}}+$environment.dbPort+g' \
                         -e 's+{{NAMESPACE}}+$environment.namespace+g' \
-                        -e 's+{{ENV_SUFFIX}}+$envSuffix+g' \
                         .kube/sequence-bank-db.yaml > .kube/sequence-bank-db.tmp
                     """
                     sh "mv -f .kube/sequence-bank-db.tmp .kube/sequence-bank-db.yaml"
