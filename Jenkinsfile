@@ -114,22 +114,22 @@ pipeline {
     }
     post {
         success {
-            slackSend (color: '#57BA57', message: """\
-[<${env.BUILD_URL}|Build ${env.BUILD_NUMBER}>] *SUCCESSFUL*\n\n \
-Job: *${env.JOB_NAME}*\n\n \
-Branch: ${GIT_BRANCH}\n \
-Author: ${COMMIT_AUTHOR}\n \
-Message: ${COMMIT_MESSAGE}
-            """)
+            slackSend (color: '#57BA57',
+                       message: """[<${env.BUILD_URL}|Build ${env.BUILD_NUMBER}>] *SUCCESSFUL*\n\n
+                                  |Job: *${env.JOB_NAME}*\n\n
+                                  |Branch: ${GIT_BRANCH}\n
+                                  |Author: ${COMMIT_AUTHOR}\n
+                                  |Message: ${COMMIT_MESSAGE}""".stripMargin()
+            )
         }
         failure {
-            slackSend (color: '#BD0808', message: """\
-[<${env.BUILD_URL}|Build ${env.BUILD_NUMBER}>] *FAILED*\n\n \
-Job: *${env.JOB_NAME}*\n\n \
-Branch: ${GIT_BRANCH}\n \
-Author: ${COMMIT_AUTHOR}\n \
-Message: ${COMMIT_MESSAGE}
-            """)
+            slackSend (color: '#BD0808',
+                       message: """[<${env.BUILD_URL}|Build ${env.BUILD_NUMBER}>] *FAILED*\n\n
+                                  |Job: *${env.JOB_NAME}*\n\n
+                                  |Branch: ${GIT_BRANCH}\n
+                                  |Author: ${COMMIT_AUTHOR}\n
+                                  |Message: ${COMMIT_MESSAGE}""".stripMargin()
+            )
         }
     }
 }
