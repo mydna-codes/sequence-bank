@@ -123,8 +123,7 @@ Message: ${COMMIT_MESSAGE}
             """)
         }
         failure {
-            slackSend (color: '#BD0808',
-                      message: """\
+            slackSend (color: '#BD0808', message: """\
 [<${env.BUILD_URL}|Build ${env.BUILD_NUMBER}>] *FAILED*\n\n \
 Job: *${env.JOB_NAME}*\n\n \
 Branch: ${GIT_BRANCH}\n \
