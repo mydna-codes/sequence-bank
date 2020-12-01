@@ -5,6 +5,14 @@ import codes.mydna.lib.Gene;
 
 public class GeneMapper {
 
+    public static Gene fromEntityLazy(GeneEntity entity){
+        if(entity == null)
+            return null;
+        Gene gene = new Gene();
+        BaseSequenceMapper.fromEntityLazy(entity, gene);
+        return gene;
+    }
+
     public static Gene fromEntity(GeneEntity entity){
         if(entity == null)
             return null;

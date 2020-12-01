@@ -41,5 +41,5 @@ liquibase:
       changelog: db/db.changelog-master.xml
       enabled: true
       startup:
-        dropAll: false
+        dropAll: true
         update: true

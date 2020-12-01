@@ -113,6 +113,4 @@
                                  referencedTableName="sequence_table"/>
     </changeSet>
 
-
-
 </databaseChangeLog>

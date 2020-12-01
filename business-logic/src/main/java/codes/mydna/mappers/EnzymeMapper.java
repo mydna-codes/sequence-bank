@@ -5,6 +5,14 @@ import codes.mydna.lib.Enzyme;
 
 public class EnzymeMapper {
 
+    public static Enzyme fromEntityLazy(EnzymeEntity entity){
+        if(entity == null)
+            return null;
+        Enzyme enzyme = new Enzyme();
+        BaseSequenceMapper.fromEntityLazy(entity, enzyme);
+        return enzyme;
+    }
+
     public static Enzyme fromEntity(EnzymeEntity entity){
         if(entity == null)
             return null;

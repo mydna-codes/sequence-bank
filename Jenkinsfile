@@ -77,17 +77,20 @@ pipeline {
                 script {
                     def deploymentConfig = readYaml file: ".ci/deployment-config.yaml"
                     def environment      = ""
+                    def subdomainSuffix  = ""
 
                     if (env.GIT_BRANCH.equals("prod") || env.GIT_BRANCH.equals("origin/prod")) {
-                        environment = deploymentConfig.environments.prod
+                        environment     = deploymentConfig.environments.prod
                     } else {
-                        environment = deploymentConfig.environments.dev
+                        environment     = deploymentConfig.environments.dev
+                        subdomainSuffix = "-test"
                     }
 
                     sh """ \
                     sed -e 's+{{IMAGE_NAME}}+$DOCKER_IMAGE_TAG:$DOCKER_IMAGE_VERSION+g' \
                         -e 's+{{SERVICE_PORT}}+$environment.servicePort+g' \
                         -e 's+{{NAMESPACE}}+$environment.namespace+g' \
+                        -e 's+{{SUBDOMAIN_SUFFIX}}+$subdomainSuffix+g' \
                         .kube/sequence-bank.yaml > .kube/sequence-bank.tmp
                     """
                     sh "mv -f .kube/sequence-bank.tmp .kube/sequence-bank.yaml"
@@ -115,19 +118,19 @@ pipeline {
     post {
         success {
             slackSend (color: '#57BA57',
-                       message: """[<${env.BUILD_URL}|Build ${env.BUILD_NUMBER}>] *SUCCESSFUL*\n\n \
-                                  |Job: *${env.JOB_NAME}*\n\n \
-                                  |Branch: ${GIT_BRANCH}\n \
-                                  |Author: ${COMMIT_AUTHOR}\n \
+                       message: """[<${env.BUILD_URL}|Build ${env.BUILD_NUMBER}>] *SUCCESSFUL*\n
+                                  |Job: *${env.JOB_NAME}*\n
+                                  |Branch: ${GIT_BRANCH}
+                                  |Author: ${COMMIT_AUTHOR}
                                   |Message: ${COMMIT_MESSAGE}""".stripMargin()
             )
         }
         failure {
             slackSend (color: '#BD0808',
-                       message: """[<${env.BUILD_URL}|Build ${env.BUILD_NUMBER}>] *FAILED*\n\n \
-                                  |Job: *${env.JOB_NAME}*\n\n \
-                                  |Branch: ${GIT_BRANCH}\n \
-                                  |Author: ${COMMIT_AUTHOR}\n \
+                       message: """[<${env.BUILD_URL}|Build ${env.BUILD_NUMBER}>] *FAILED*\n
+                                  |Job: *${env.JOB_NAME}*\n
+                                  |Branch: ${GIT_BRANCH}
+                                  |Author: ${COMMIT_AUTHOR}
                                   |Message: ${COMMIT_MESSAGE}""".stripMargin()
             )
         }

@@ -1,7 +1,6 @@
 package codes.mydna.services.impl;
 
 import codes.mydna.entities.DnaEntity;
-import codes.mydna.entities.SequenceEntity;
 import codes.mydna.exceptions.BadRequestException;
 import codes.mydna.exceptions.NotFoundException;
 import codes.mydna.lib.Dna;
@@ -16,7 +15,6 @@ import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -73,8 +71,8 @@ public class DnaServiceImpl implements DnaService {
         if(dna.getName() == null || dna.getName().isEmpty())
             throw new BadRequestException("Field 'name' of Dna object is invalid.");
 
-
         DnaEntity dnaEntity = DnaMapper.toEntity(dna);
+
         em.getTransaction().begin();
         em.persist(dnaEntity);
         em.getTransaction().commit();
@@ -104,8 +102,7 @@ public class DnaServiceImpl implements DnaService {
         em.merge(entity);
         em.getTransaction().commit();
 
-        Dna updatedDna = DnaMapper.fromEntity(entity);
-        return updatedDna;
+        return DnaMapper.fromEntity(entity);
     }
 
     @Override
@@ -113,9 +110,11 @@ public class DnaServiceImpl implements DnaService {
         DnaEntity entity = getDnaEntity(id);
         if(entity == null)
             return false;
+
         em.getTransaction().begin();
         em.remove(entity);
         em.getTransaction().commit();
+
         return true;
     }
 
