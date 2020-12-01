@@ -6,7 +6,7 @@
     <parent>
         <groupId>codes.mydna</groupId>
         <artifactId>sequence-bank</artifactId>
-        <version>0.0.1</version>
+        <version>0.0.2</version>
     </parent>
 
     <artifactId>api</artifactId>
