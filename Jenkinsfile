@@ -77,20 +77,20 @@ pipeline {
                 script {
                     def deploymentConfig = readYaml file: ".ci/deployment-config.yaml"
                     def environment      = ""
-                    def subdomainSuffix  = ""
+                    def envSuffix        = ""
 
                     if (env.GIT_BRANCH.equals("prod") || env.GIT_BRANCH.equals("origin/prod")) {
-                        environment     = deploymentConfig.environments.prod
+                        environment = deploymentConfig.environments.prod
                     } else {
-                        environment     = deploymentConfig.environments.dev
-                        subdomainSuffix = "-test"
+                        environment = deploymentConfig.environments.dev
+                        envSuffix   = "-test"
                     }
 
                     sh """ \
                     sed -e 's+{{IMAGE_NAME}}+$DOCKER_IMAGE_TAG:$DOCKER_IMAGE_VERSION+g' \
                         -e 's+{{SERVICE_PORT}}+$environment.servicePort+g' \
                         -e 's+{{NAMESPACE}}+$environment.namespace+g' \
-                        -e 's+{{SUBDOMAIN_SUFFIX}}+$subdomainSuffix+g' \
+                        -e 's+{{ENV_SUFFIX}}+$envSuffix+g' \
                         .kube/sequence-bank.yaml > .kube/sequence-bank.tmp
                     """
                     sh "mv -f .kube/sequence-bank.tmp .kube/sequence-bank.yaml"
@@ -99,6 +99,7 @@ pipeline {
                     sh """ \
                     sed -e 's+{{DATABASE_PORT}}+$environment.dbPort+g' \
                         -e 's+{{NAMESPACE}}+$environment.namespace+g' \
+                        -e 's+{{ENV_SUFFIX}}+$envSuffix+g' \
                         .kube/sequence-bank-db.yaml > .kube/sequence-bank-db.tmp
                     """
                     sh "mv -f .kube/sequence-bank-db.tmp .kube/sequence-bank-db.yaml"
