@@ -34,12 +34,13 @@ kumuluzee:
       password: postgres
       pool:
         max-size: 20
+  migrations:
+    enabled: true
+    liquibase:
+      datasources:
+        - jndi-name: jdbc/sequence-bank-db
+          changelog: db/db.changelog-master.xml
+          startup:
+            dropAll: false
+            update: true
 
-liquibase:
-  datasources:
-    - jndi-name: jdbc/sequence-bank-db
-      changelog: db/db.changelog-master.xml
-      enabled: true
-      startup:
-        dropAll: true
-        update: true
