@@ -6,7 +6,7 @@
 
     <groupId>codes.mydna</groupId>
     <artifactId>sequence-bank</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <packaging>pom</packaging>
 
     <properties>
@@ -40,17 +40,17 @@
             <dependency>
                 <groupId>codes.mydna</groupId>
                 <artifactId>business-logic</artifactId>
-                <version>0.0.2</version>
+                <version>0.0.3</version>
             </dependency>
             <dependency>
                 <groupId>codes.mydna</groupId>
                 <artifactId>entities</artifactId>
-                <version>0.0.2</version>
+                <version>0.0.3</version>
             </dependency>
             <dependency>
                 <groupId>codes.mydna</groupId>
                 <artifactId>sequence-bank-lib</artifactId>
-                <version>0.0.2</version>
+                <version>0.0.3</version>
             </dependency>
 
             <!-- KumuluzEE (BOM - Bills of Material) -->
