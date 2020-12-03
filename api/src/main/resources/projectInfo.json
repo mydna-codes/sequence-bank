@@ -1,0 +1,26 @@
+{
+  "clani": [
+    "dm6067"
+  ],
+  "opis_projekta": "Aplikacija za iskanje nizov v dna sekvencah in razne operazcije nad samimi sekvencami.",
+  "mikrostoritve": [
+    "https://sequence-bank.mydna.codes/v1/dna",
+    "https://analysis.mydna.codes/v1/sample"
+  ],
+  "github": [
+    "https://github.com/mydna-codes/sequence-bank",
+    "https://github.com/mydna-codes/analysis"
+  ],
+  "travis": [
+    "https://jenkins.din-cloud.com/job/mydnacodes/job/sequence-bank/",
+    "https://jenkins.din-cloud.com/job/mydnacodes/job/analysis/"
+  ],
+  "jenkins": [
+    "https://jenkins.din-cloud.com/job/mydnacodes/job/sequence-bank/",
+    "https://jenkins.din-cloud.com/job/mydnacodes/job/analysis/"
+  ],
+  "dockerhub": [
+    "https://hub.docker.com/repository/docker/mydnacodes/sequence-bank",
+    "https://hub.docker.com/repository/docker/mydnacodes/analysis"
+  ]
+}

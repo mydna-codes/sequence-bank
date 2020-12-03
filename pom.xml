@@ -23,6 +23,7 @@
         <kumuluzee-cors.version>1.0.6</kumuluzee-cors.version>
         <kumuluzee-security.version>1.2.0</kumuluzee-security.version>
         <kumuluzee-health.version>2.3.0</kumuluzee-health.version>
+        <kumuluzee-migrations-liquibase.version>1.0.0-SNAPSHOT</kumuluzee-migrations-liquibase.version>
 
         <!-- PostgreSQL -->
         <postgresql.version>42.2.18</postgresql.version>
@@ -101,7 +102,6 @@
                 <artifactId>kumuluzee-openapi-ui</artifactId>
                 <version>${kumuluzee-openapi.version}</version>
             </dependency>
-
             <!-- PostreSQL -->
             <dependency>
                 <groupId>org.postgresql</groupId>
@@ -110,10 +110,11 @@
             </dependency>
             <!-- Liquibase -->
             <dependency>
-                <groupId>org.liquibase</groupId>
-                <artifactId>liquibase-core</artifactId>
-                <version>${liquibase.version}</version>
+                <groupId>com.kumuluz.ee.migrations</groupId>
+                <artifactId>kumuluzee-migrations-liquibase</artifactId>
+                <version>${kumuluzee-migrations-liquibase.version}</version>
             </dependency>
+
 
             <!-- Nexus - REST lib -->
             <dependency>

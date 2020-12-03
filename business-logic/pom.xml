@@ -50,10 +50,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.liquibase</groupId>
-            <artifactId>liquibase-core</artifactId>
-        </dependency>
-        <dependency>
             <groupId>codes.mydna</groupId>
             <artifactId>rest-lib</artifactId>
         </dependency>
