@@ -94,7 +94,7 @@ pipeline {
                     sh "cat .kube/sequence-bank.yaml"
 
                     sh """ \
-                        -e 's+{{NAMESPACE}}+$environment.namespace+g' \
+                    sed -e 's+{{NAMESPACE}}+$environment.namespace+g' \
                         .kube/sequence-bank-db.yaml > .kube/sequence-bank-db.tmp
                     """
                     sh "mv -f .kube/sequence-bank-db.tmp .kube/sequence-bank-db.yaml"
