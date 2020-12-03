@@ -87,7 +87,7 @@ pipeline {
                     sh """ \
                     sed -e 's+{{IMAGE_NAME}}+$DOCKER_IMAGE_TAG:$DOCKER_IMAGE_VERSION+g' \
                         -e 's+{{NAMESPACE}}+$environment.namespace+g' \
-                        -e 's+{{ENV_SUFFIX}}+$environment.env-suffix+g' \
+                        -e 's+{{ENV_SUFFIX}}+$environment.suffix+g' \
                         .kube/sequence-bank.yaml > .kube/sequence-bank.tmp
                     """
                     sh "mv -f .kube/sequence-bank.tmp .kube/sequence-bank.yaml"

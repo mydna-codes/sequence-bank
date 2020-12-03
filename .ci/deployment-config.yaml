@@ -1,7 +1,7 @@
 environments:
   dev:
-    env-suffix: "-test"
+    suffix: "-test"
     namespace: mydnacodes
   prod:
-    env-suffix: ""
+    suffix: ""
     namespace: mydnacodes-prod
