@@ -1,6 +1,6 @@
 # sequence-bank
 
-[![Build Status](https://jenkins.din-cloud.com/buildStatus/icon?job=mydnacodes%2Fsequence-bank%2Fmaster)](https://jenkins.din-cloud.com/job/mydnacodes/job/sequence-bank/job/master/)
+[![Build Status](https://jenkins.din-cloud.com/buildStatus/icon?job=mydnacodes%2Fsequence-bank%2Fmaster&subject=CI/CD)](https://jenkins.din-cloud.com/job/mydnacodes/job/sequence-bank/job/master/)
 
 ### Library
 ```xml
