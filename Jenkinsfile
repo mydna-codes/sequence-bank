@@ -104,12 +104,14 @@ pipeline {
         }
         stage("Deploy application") {
             steps {
-                withKubeConfig([credentialsId: KUBERNETES_CREDENTIALS]) {
+                if (!(env.GIT_BRANCH.equals("prod") || env.GIT_BRANCH.equals("origin/prod"))) {
                     // Temporary - force new image pull - dev only
-                    if (!(env.GIT_BRANCH.equals("prod") || env.GIT_BRANCH.equals("origin/prod"))) {
+                    withKubeConfig([credentialsId: KUBERNETES_CREDENTIALS]) {
                         sh "kubectl scale --replicas=0 deployment sequence-bank-app -n mydnacodes"
                         sh "kubectl scale --replicas=1 deployment sequence-bank-app -n mydnacodes"
                     }
+                }
+                withKubeConfig([credentialsId: KUBERNETES_CREDENTIALS]) {
                     sh "kubectl apply -f .kube/"
                 }
             }
