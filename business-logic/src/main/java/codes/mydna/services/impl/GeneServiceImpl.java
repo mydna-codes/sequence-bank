@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class GeneServiceImpl implements GeneService {
 
-    private static Logger LOG = Logger.getLogger(GeneServiceImpl.class.getSimpleName());
+    private static final Logger LOG = Logger.getLogger(GeneServiceImpl.class.getName());
     private String uuid;
 
     @Inject

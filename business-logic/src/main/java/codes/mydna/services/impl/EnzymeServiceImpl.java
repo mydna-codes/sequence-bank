@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class EnzymeServiceImpl implements EnzymeService {
 
-    private static Logger LOG = Logger.getLogger(EnzymeServiceImpl.class.getSimpleName());
+    private static final Logger LOG = Logger.getLogger(EnzymeServiceImpl.class.getName());
     private String uuid;
 
     @Inject

@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class DnaServiceImpl implements DnaService {
 
-    private static Logger LOG = Logger.getLogger(DnaServiceImpl.class.getSimpleName());
+    private static final Logger LOG = Logger.getLogger(DnaServiceImpl.class.getName());
     private String uuid;
 
     @Inject
