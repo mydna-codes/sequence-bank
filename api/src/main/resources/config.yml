@@ -15,7 +15,8 @@ kumuluzee:
       exposed-headers: "X-Total-Count"
   grpc:
     server:
-      port: 8081
+      http:
+        port: 8081
   openapi:
     enabled: true
     ui:
