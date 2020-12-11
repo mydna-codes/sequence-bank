@@ -44,12 +44,13 @@ public class DnaGrpcResource extends DnaServiceGrpc.DnaServiceImplBase {
 
         } catch (RestException e) {
             LOG.info(e.getMessage());
-            if(e.getStatusCode() == 404)
-                throw Status.NOT_FOUND.asRuntimeException();
-            throw Status.INTERNAL.withDescription(e.getMessage()).asRuntimeException();
+            Throwable throwable = (e.getStatusCode() == 404)
+                    ? new Throwable(Status.NOT_FOUND.asRuntimeException())
+                    : new Throwable(Status.INTERNAL.withDescription(e.getMessage()).asRuntimeException());
+            responseObserver.onError(throwable);
         } catch (Exception e) {
             LOG.warning(e.getMessage());
-            throw Status.INTERNAL.withDescription(e.getMessage()).asRuntimeException();
+            responseObserver.onError(new Throwable(Status.INTERNAL.withDescription(e.getMessage()).asRuntimeException())); ;
         }
     }
 
