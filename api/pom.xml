@@ -44,10 +44,6 @@
             <artifactId>kumuluzee-rest-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.kumuluz.ee.grpc</groupId>
-            <artifactId>kumuluzee-grpc</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.kumuluz.ee.health</groupId>
             <artifactId>kumuluzee-health</artifactId>
         </dependency>
@@ -66,14 +62,6 @@
     </dependencies>
 
     <build>
-        <finalName>sequence-bank</finalName>
-        <extensions>
-            <extension>
-                <groupId>kr.motd.maven</groupId>
-                <artifactId>os-maven-plugin</artifactId>
-                <version>1.6.2</version>
-            </extension>
-        </extensions>
         <plugins>
             <plugin>
                 <groupId>com.kumuluz.ee</groupId>
@@ -84,24 +72,6 @@
                         <id>package</id>
                         <goals>
                             <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.xolstice.maven.plugins</groupId>
-                <artifactId>protobuf-maven-plugin</artifactId>
-                <version>0.6.1</version>
-                <configuration>
-                    <protocArtifact>com.google.protobuf:protoc:3.5.1-1:exe:${os.detected.classifier}</protocArtifact>
-                    <pluginId>grpc-java</pluginId>
-                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:1.15.1:exe:${os.detected.classifier}</pluginArtifact>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>compile-custom</goal>
                         </goals>
                     </execution>
                 </executions>

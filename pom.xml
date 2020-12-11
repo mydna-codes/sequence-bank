@@ -41,7 +41,7 @@
             <!-- Internal modules -->
             <dependency>
                 <groupId>codes.mydna</groupId>
-                <artifactId>sequence-bank-lib</artifactId>
+                <artifactId>sequence-bank-lib-v1</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
