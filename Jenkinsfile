@@ -88,6 +88,8 @@ pipeline {
                     sed -e 's+{{IMAGE_NAME}}+$DOCKER_IMAGE_TAG:$DOCKER_IMAGE_VERSION+g' \
                         -e 's+{{NAMESPACE}}+$environment.namespace+g' \
                         -e 's+{{ENV_SUFFIX}}+$environment.suffix+g' \
+                        -e 's+{{ENV_NAME}}+$environment.name+g' \
+                        -e 's+{{ENV_PROD}}+$environment.prod+g' \
                         .kube/sequence-bank.yaml > .kube/sequence-bank.tmp
                     """
                     sh "mv -f .kube/sequence-bank.tmp .kube/sequence-bank.yaml"
@@ -106,7 +108,7 @@ pipeline {
             steps {
                 script {
                     if (!(env.GIT_BRANCH.equals("prod") || env.GIT_BRANCH.equals("origin/prod"))) {
-                        // Temporary - force new image pull - dev only
+                        // Temporary - force image pull - dev only
                         withKubeConfig([credentialsId: KUBERNETES_CREDENTIALS]) {
                             sh "kubectl scale --replicas=0 deployment sequence-bank-app -n mydnacodes"
                             sh "kubectl scale --replicas=1 deployment sequence-bank-app -n mydnacodes"

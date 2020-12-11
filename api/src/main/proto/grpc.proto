@@ -1,0 +1,25 @@
+syntax = "proto3";
+option java_package = "codes.mydna.lib.grpc";
+option java_multiple_files = false;
+
+service DnaService {
+  rpc getDna(DnaRequest) returns (DnaResponse) {};
+}
+
+message DnaRequest {
+  string id = 1;
+}
+
+message DnaResponse {
+  Dna dna = 1;
+}
+
+message Dna {
+  string id = 1;
+  string name = 2;
+  Sequence sequence = 3;
+}
+
+message Sequence {
+  string value = 1;
+}
