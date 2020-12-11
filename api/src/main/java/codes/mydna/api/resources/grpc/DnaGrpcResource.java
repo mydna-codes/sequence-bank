@@ -7,6 +7,7 @@ import codes.mydna.lib.grpc.DnaServiceGrpc;
 import codes.mydna.lib.grpc.DnaServiceProto;
 import codes.mydna.services.DnaService;
 import com.kumuluz.ee.grpc.annotations.GrpcService;
+import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 
 import javax.enterprise.inject.spi.CDI;
@@ -36,8 +37,6 @@ public class DnaGrpcResource extends DnaServiceGrpc.DnaServiceImplBase {
 
             var response = DnaServiceProto.Response.newBuilder()
                     .setDna(dnaResponseBuilder)
-                    .setStatusCode(200)
-                    .setStatusMessage("OK")
                     .build();
 
             responseObserver.onNext(response);
@@ -45,18 +44,12 @@ public class DnaGrpcResource extends DnaServiceGrpc.DnaServiceImplBase {
 
         } catch (RestException e) {
             LOG.info(e.getMessage());
-            var response = DnaServiceProto.Response.newBuilder()
-                    .setStatusCode(e.getStatusCode())
-                    .setStatusMessage(e.getMessage())
-                    .build();
-            responseObserver.onNext(response);
+            if(e.getStatusCode() == 404)
+                throw Status.NOT_FOUND.asRuntimeException();
+            throw Status.INTERNAL.withDescription(e.getMessage()).asRuntimeException();
         } catch (Exception e) {
             LOG.warning(e.getMessage());
-            var response = DnaServiceProto.Response.newBuilder()
-                    .setStatusCode(500)
-                    .setStatusMessage(e.getMessage())
-                    .build();
-            responseObserver.onNext(response);
+            throw Status.INTERNAL.withDescription(e.getMessage()).asRuntimeException();
         }
     }
 

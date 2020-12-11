@@ -12,9 +12,7 @@ message Request {
 }
 
 message Response {
-  uint32 statusCode = 1;
-  string statusMessage = 2;
-  Dna dna = 3;
+  Dna dna = 1;
 }
 
 message Dna {
