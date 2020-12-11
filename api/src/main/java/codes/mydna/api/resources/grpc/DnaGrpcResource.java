@@ -1,5 +1,6 @@
 package codes.mydna.api.resources.grpc;
 
+import codes.mydna.exceptions.RestException;
 import codes.mydna.lib.Dna;
 import codes.mydna.lib.Sequence;
 import codes.mydna.lib.grpc.DnaServiceGrpc;
@@ -17,7 +18,7 @@ public class DnaGrpcResource extends DnaServiceGrpc.DnaServiceImplBase {
     private static final Logger LOG = Logger.getLogger(DnaGrpcResource.class.getName());
 
     @Override
-    public void getDna(DnaServiceProto.DnaRequest request, StreamObserver<DnaServiceProto.DnaResponse> responseObserver) {
+    public void getDna(DnaServiceProto.Request request, StreamObserver<DnaServiceProto.Response> responseObserver) {
 
         DnaService dnaService = CDI.current().select(DnaService.class).get();
 
@@ -33,15 +34,29 @@ public class DnaGrpcResource extends DnaServiceGrpc.DnaServiceImplBase {
                     .setName(dna.getName())
                     .setSequence(seqResponseBuilder.build());
 
-            var response = DnaServiceProto.DnaResponse.newBuilder()
+            var response = DnaServiceProto.Response.newBuilder()
                     .setDna(dnaResponseBuilder)
+                    .setStatusCode(200)
+                    .setStatusMessage("OK")
                     .build();
 
             responseObserver.onNext(response);
             responseObserver.onCompleted();
+
+        } catch (RestException e) {
+            LOG.info(e.getMessage());
+            var response = DnaServiceProto.Response.newBuilder()
+                    .setStatusCode(e.getStatusCode())
+                    .setStatusMessage(e.getMessage())
+                    .build();
+            responseObserver.onNext(response);
         } catch (Exception e) {
-            LOG.severe(e.getMessage());
-            responseObserver.onError(e);
+            LOG.warning(e.getMessage());
+            var response = DnaServiceProto.Response.newBuilder()
+                    .setStatusCode(500)
+                    .setStatusMessage(e.getMessage())
+                    .build();
+            responseObserver.onNext(response);
         }
     }
 

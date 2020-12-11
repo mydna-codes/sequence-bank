@@ -4,15 +4,17 @@ option java_outer_classname = "DnaServiceProto";
 option java_multiple_files = false;
 
 service DnaService {
-  rpc getDna(DnaRequest) returns (DnaResponse) {};
+  rpc getDna(Request) returns (Response) {};
 }
 
-message DnaRequest {
+message Request {
   string id = 1;
 }
 
-message DnaResponse {
-  Dna dna = 1;
+message Response {
+  uint32 statusCode = 1;
+  string statusMessage = 2;
+  Dna dna = 3;
 }
 
 message Dna {
