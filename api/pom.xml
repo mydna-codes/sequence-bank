@@ -62,6 +62,7 @@
     </dependencies>
 
     <build>
+        <finalName>sequence-bank</finalName>
         <plugins>
             <plugin>
                 <groupId>com.kumuluz.ee</groupId>
