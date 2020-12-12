@@ -1,5 +1,6 @@
 package codes.mydna.api.resources;
 
+import codes.mydna.api.resources.definitions.GeneResourceDefinition;
 import codes.mydna.http.Headers;
 import codes.mydna.lib.Gene;
 import codes.mydna.services.GeneService;
@@ -19,7 +20,7 @@ import javax.ws.rs.core.UriInfo;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @RequestScoped
-public class GeneResource {
+public class GeneResource implements GeneResourceDefinition {
 
     @Context
     private UriInfo uriInfo;

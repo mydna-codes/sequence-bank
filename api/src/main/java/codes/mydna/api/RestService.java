@@ -1,9 +1,22 @@
 package codes.mydna.api;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.info.License;
+
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
-@ApplicationPath("/v1")
+@OpenAPIDefinition(
+        info = @Info(title="Sequence bank API",
+                version="v1",
+                contact = @Contact(),
+                license = @License(),
+                description = "API for storing sequences like DNAs, genes and enzymes"
+        )
+)
+@ApplicationPath("v1")
 public class RestService extends Application {
 
 }

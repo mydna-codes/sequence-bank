@@ -1,5 +1,6 @@
 package codes.mydna.api.resources;
 
+import codes.mydna.api.resources.definitions.EnzymeResourceDefinition;
 import codes.mydna.http.Headers;
 import codes.mydna.lib.Enzyme;
 import codes.mydna.services.EnzymeService;
@@ -19,7 +20,7 @@ import javax.ws.rs.core.UriInfo;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @RequestScoped
-public class EnzymeResource {
+public class EnzymeResource implements EnzymeResourceDefinition {
 
     @Context
     private UriInfo uriInfo;

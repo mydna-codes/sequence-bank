@@ -30,8 +30,8 @@ kumuluzee:
         type: liveness
         jndi-name: jdbc/sequence-bank-db
       disk-space-health-check:
-        threshold: 100000000
         type: liveness
+        threshold: 100000000
   datasources:
     - jndi-name: jdbc/sequence-bank-db
       connection-url: jdbc:postgresql://localhost:5432/sequence-bank
