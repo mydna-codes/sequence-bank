@@ -5,6 +5,7 @@ kumuluzee:
     prod: false
     name: dev
   server:
+    base-url: http://localhost:8080
     show-server-info: false
     http:
       port: 8080
