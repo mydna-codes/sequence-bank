@@ -4,12 +4,15 @@ import codes.mydna.exceptions.RestException;
 import codes.mydna.lib.Dna;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
 public interface DnaResourceDefinition {
@@ -64,7 +67,7 @@ public interface DnaResourceDefinition {
             }
     )
     public Response getDna(
-            @Parameter(required = true, description = "DNA's id") String id);
+            @Parameter(required = true, in = ParameterIn.PATH, description = "DNA's id") String id);
 
     @Operation(
             description = "Inserts DNA into database.",
@@ -132,7 +135,7 @@ public interface DnaResourceDefinition {
             }
     )
     public Response updateDna(
-            @Parameter(required = true, description = "DNA's id") String id,
+            @Parameter(required = true, in = ParameterIn.PATH, description = "DNA's id") String id,
             @Parameter(required = true, description = "New DNA object") Dna dna);
 
     @Operation(
@@ -151,6 +154,6 @@ public interface DnaResourceDefinition {
             }
     )
     public Response deleteDna(
-            @Parameter(name = "Id of the DNA that will be deleted") String id);
+            @Parameter(required = true, in = ParameterIn.PATH, description = "Id of the DNA that will be deleted") String id);
 
 }

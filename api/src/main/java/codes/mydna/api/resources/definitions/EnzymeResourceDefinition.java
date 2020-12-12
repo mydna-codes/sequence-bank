@@ -4,6 +4,7 @@ import codes.mydna.exceptions.RestException;
 import codes.mydna.lib.Enzyme;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -64,7 +65,7 @@ public interface EnzymeResourceDefinition {
             }
     )
     public Response getEnzyme(
-            @Parameter(required = true, description = "Enzyme's id") String id);
+            @Parameter(required = true, in = ParameterIn.PATH, description = "Enzyme's id") String id);
 
     @Operation(
             description = "Inserts enzyme into database.",
@@ -132,7 +133,7 @@ public interface EnzymeResourceDefinition {
             }
     )
     public Response updateEnzyme(
-            @Parameter(required = true, description = "enzyme's id") String id,
+            @Parameter(required = true, in = ParameterIn.PATH, description = "enzyme's id") String id,
             @Parameter(required = true, description = "New enzyme object") Enzyme enzyme);
 
     @Operation(
@@ -151,5 +152,5 @@ public interface EnzymeResourceDefinition {
             }
     )
     public Response deleteEnzyme(
-            @Parameter(name = "Id of the enzyme that will be deleted") String id);
+            @Parameter(required = true, in = ParameterIn.PATH, description = "Id of the enzyme that will be deleted") String id);
 }

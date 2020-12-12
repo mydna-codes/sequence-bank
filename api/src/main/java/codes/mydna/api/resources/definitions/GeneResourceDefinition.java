@@ -4,6 +4,7 @@ import codes.mydna.exceptions.RestException;
 import codes.mydna.lib.Gene;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -64,7 +65,7 @@ public interface GeneResourceDefinition {
             }
     )
     public Response getGene(
-            @Parameter(required = true, description = "Gene's id") String id);
+            @Parameter(required = true, in = ParameterIn.PATH, description = "Gene's id") String id);
 
     @Operation(
             description = "Inserts gene into database.",
@@ -132,7 +133,7 @@ public interface GeneResourceDefinition {
             }
     )
     public Response updateGene(
-            @Parameter(required = true, description = "gene's id") String id,
+            @Parameter(required = true, in = ParameterIn.PATH, description = "gene's id") String id,
             @Parameter(required = true, description = "New gene object") Gene gene);
 
     @Operation(
@@ -151,6 +152,6 @@ public interface GeneResourceDefinition {
             }
     )
     public Response deleteGene(
-            @Parameter(name = "Id of the gene that will be deleted") String id);
+            @Parameter(required = true, in = ParameterIn.PATH, description = "Id of the gene that will be deleted") String id);
     
 }
