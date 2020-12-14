@@ -24,7 +24,7 @@
         <kumuluzee-security.version>1.2.0</kumuluzee-security.version>
         <kumuluzee-health.version>2.3.0</kumuluzee-health.version>
         <kumuluzee-grpc.version>1.1.0</kumuluzee-grpc.version>
-        <kumuluzee-migrations-liquibase.version>1.0.0-SNAPSHOT</kumuluzee-migrations-liquibase.version>
+        <kumuluzee-migrations-liquibase.version>1.0.1-SNAPSHOT</kumuluzee-migrations-liquibase.version>
 
         <!-- PostgreSQL -->
         <postgresql.version>42.2.18</postgresql.version>
