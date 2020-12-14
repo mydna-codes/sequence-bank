@@ -1,5 +1,8 @@
 package codes.mydna.api.resources;
 
+import codes.mydna.api.resources.definitions.DemoResourceDefinition;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+
 import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -12,13 +15,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-@RequestScoped
+@Path("demo")
+@Tag(name = "Other")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-@Path("demo")
-public class DemoResource {
+@RequestScoped
+public class DemoResource implements DemoResourceDefinition {
 
-    @GET
+    @Override
     public Response demo() {
         StringBuilder content = new StringBuilder();
 

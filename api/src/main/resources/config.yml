@@ -4,6 +4,9 @@ kumuluzee:
   env:
     prod: false
     name: dev
+  dev:
+    scan-libraries:
+      - rest-lib
   server:
     base-url: http://localhost:8080
     show-server-info: false
@@ -18,8 +21,9 @@ kumuluzee:
     server:
       http:
         port: 8081
-  openapi:
+  openapi-mp:
     enabled: true
+    servers: http://localhost:8080
     ui:
       enabled: true
   health:

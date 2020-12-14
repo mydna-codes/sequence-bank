@@ -1,11 +1,10 @@
 package codes.mydna.api;
 
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.info.Contact;
-import io.swagger.v3.oas.annotations.info.Info;
-import io.swagger.v3.oas.annotations.info.License;
-import io.swagger.v3.oas.annotations.servers.Server;
-import io.swagger.v3.oas.annotations.servers.Servers;
+
+import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
+import org.eclipse.microprofile.openapi.annotations.info.Contact;
+import org.eclipse.microprofile.openapi.annotations.info.Info;
+import org.eclipse.microprofile.openapi.annotations.info.License;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
@@ -14,13 +13,9 @@ import javax.ws.rs.core.Application;
         info = @Info(title="Sequence bank API",
                 version="v1",
                 contact = @Contact(),
-                license = @License(),
+                license = @License(name = "No licence"),
                 description = "API for storing sequences like DNAs, genes and enzymes"
-        ),
-        servers = {
-                @Server(url = "https://sequence-bank-test.mydna.codes"),
-                @Server(url = "http://localhost:8080")
-        }
+        )
 )
 @ApplicationPath("v1")
 public class RestService extends Application {

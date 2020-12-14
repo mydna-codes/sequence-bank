@@ -1,11 +1,18 @@
 package codes.mydna.lib;
 
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
 import java.util.Date;
 
 public class BaseType {
 
+    @Schema(hidden = true)
     private String id;
+
+    @Schema(hidden = true)
     private Date created;
+
+    @Schema(hidden = true)
     private Date lastModified;
 
     public String getId() {

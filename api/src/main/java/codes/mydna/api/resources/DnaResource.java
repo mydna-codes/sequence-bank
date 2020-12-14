@@ -7,16 +7,20 @@ import codes.mydna.services.DnaService;
 import codes.mydna.utils.EntityList;
 import codes.mydna.utils.QueryParametersBuilder;
 import com.kumuluz.ee.rest.beans.QueryParameters;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 @Path("dna")
+@Tag(name = "Dna")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @RequestScoped
@@ -28,33 +32,30 @@ public class DnaResource implements DnaResourceDefinition {
     @Inject
     private DnaService dnaService;
 
-    @GET
+    @Override
     public Response getDnas(){
-        QueryParameters qp = QueryParametersBuilder.build(uriInfo.getRequestUri().getRawQuery());
+        QueryParameters qp = QueryParametersBuilder.buildDefault(uriInfo.getRequestUri().getRawQuery());
         EntityList<Dna> dnas = dnaService.getDnas(qp);
         return Response.ok().entity(dnas.getList()).header(Headers.XTotalCount, dnas.getCount()).build();
     }
 
-    @GET
-    @Path("{id}")
-    public Response getDna(@PathParam("id") String id){
+    @Override
+    public Response getDna(String id){
         return Response.ok(dnaService.getDna(id)).build();
     }
 
-    @POST
+    @Override
     public Response insertDna(Dna dna){
         return Response.ok(dnaService.insertDna(dna)).build();
     }
 
-    @PUT
-    @Path("{id}")
-    public Response updateDna(@PathParam("id") String id, Dna dna) {
+    @Override
+    public Response updateDna(String id, Dna dna) {
         return Response.ok(dnaService.updateDna(dna, id)).build();
     }
 
-    @DELETE
-    @Path("{id}")
-    public Response deleteDna(@PathParam("id") String id){
+    @Override
+    public Response deleteDna(String id){
         return Response.ok(dnaService.removeDna(id)).build();
     }
 }
