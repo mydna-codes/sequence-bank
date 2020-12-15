@@ -128,7 +128,7 @@ pipeline {
         success {
             slackSend (color: '#57BA57',
                        message: """[<${env.BUILD_URL}|Build ${env.BUILD_NUMBER}>] *SUCCESSFUL*\n
-                                  |Version: `${PROJECT_ARTIFACT_ID}:${PROJECT_VERSION}\n`
+                                  |Version: `${PROJECT_ARTIFACT_ID}:${PROJECT_VERSION}`\n
                                   |Branch:  *${GIT_BRANCH}*
                                   |Author:  ${COMMIT_AUTHOR}
                                   |Message: ${COMMIT_MESSAGE}""".stripMargin()
@@ -137,7 +137,7 @@ pipeline {
         failure {
             slackSend (color: '#BD0808',
                        message: """[<${env.BUILD_URL}|Build ${env.BUILD_NUMBER}>] *FAILED*\n
-                                  |Version: `${PROJECT_ARTIFACT_ID}:${PROJECT_VERSION}\n`
+                                  |Version: `${PROJECT_ARTIFACT_ID}:${PROJECT_VERSION}`\n
                                   |Branch:  *${GIT_BRANCH}*
                                   |Author:  ${COMMIT_AUTHOR}
                                   |Message: ${COMMIT_MESSAGE}""".stripMargin(),
