@@ -125,43 +125,21 @@ pipeline {
     post {
         success {
             slackSend (color: '#57BA57',
-                       blocks: [
-                           [
-                               type: "divider"
-                           ],
-                           [
-                               type: "section",
-                               text: [
-                                   type: "mrkdwn",
-                                   text: "\n[<${env.BUILD_URL}|Build ${env.BUILD_NUMBER}>] *SUCCESSFUL*\n"
-                               ]
-                           ],
-                           [
-                               type: "divider"
-                           ],
-                           [
-                               type: "section",
-                               text: [
-                                   type: "mrkdwn",
-                                   text: """Job: *${env.JOB_NAME}*\n
-                                             |Project version: `${PROJECT_VERSION}\n`
-                                             |Branch: ${GIT_BRANCH}
-                                             |Author: ${COMMIT_AUTHOR}
-                                             |Message: ${COMMIT_MESSAGE}""".stripMargin()
-                               ]
-                           ],
-                           [
-                               type: "divider"
-                           ]
-                       ]
+                       message: """[<${env.BUILD_URL}|Build ${env.BUILD_NUMBER}>] *SUCCESSFUL*\n
+                                  |Job: *${env.JOB_NAME}*\n
+                                  |Version: `${PROJECT_VERSION}`
+                                  |Branch:  ${GIT_BRANCH}
+                                  |Author:  ${COMMIT_AUTHOR}
+                                  |Message: ${COMMIT_MESSAGE}""".stripMargin()
             )
         }
         failure {
             slackSend (color: '#BD0808',
                        message: """[<${env.BUILD_URL}|Build ${env.BUILD_NUMBER}>] *FAILED*\n
                                   |Job: *${env.JOB_NAME}*\n
-                                  |Branch: ${GIT_BRANCH}
-                                  |Author: ${COMMIT_AUTHOR}
+                                  |Version: `${PROJECT_VERSION}`
+                                  |Branch:  ${GIT_BRANCH}
+                                  |Author:  ${COMMIT_AUTHOR}
                                   |Message: ${COMMIT_MESSAGE}""".stripMargin()
             )
         }
