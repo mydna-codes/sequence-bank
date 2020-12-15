@@ -2,13 +2,13 @@ package codes.mydna.lib;
 
 public class Sequence extends BaseType {
 
-    private String sequence;
+    private String value;
 
     public String getValue() {
-        return sequence;
+        return value;
     }
 
-    public void setValue(String sequence) {
-        this.sequence = sequence;
+    public void setValue(String value) {
+        this.value = value;
     }
 }
