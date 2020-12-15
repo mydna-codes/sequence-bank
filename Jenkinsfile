@@ -141,7 +141,6 @@ pipeline {
                                   |Branch:  *${GIT_BRANCH}*
                                   |Author:  ${COMMIT_AUTHOR}
                                   |Message: ${COMMIT_MESSAGE}""".stripMargin(),
-                       fallback: "Job: *${env.JOB_NAME}*\n\nBuild aborted."
             )
         }
     }
