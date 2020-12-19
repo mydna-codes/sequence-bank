@@ -3,24 +3,22 @@ option java_package = "codes.mydna.lib.grpc";
 option java_outer_classname = "DnaServiceProto";
 option java_multiple_files = false;
 
+import "common.proto";
+
 service DnaService {
-  rpc getDna(Request) returns (Response) {};
+  rpc getDna(DnaRequest) returns (DnaResponse) {};
 }
 
-message Request {
+message DnaRequest {
   string id = 1;
 }
 
-message Response {
+message DnaResponse {
   Dna dna = 1;
 }
 
 message Dna {
-  string id = 1;
-  string name = 2;
-  Sequence sequence = 3;
-}
-
-message Sequence {
-  string value = 1;
+  BaseSequenceInfo baseSequenceInfo = 1;
+  Sequence sequence = 2;
+  string EntityStatus = 3;
 }
