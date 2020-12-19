@@ -1,0 +1,24 @@
+syntax = "proto3";
+option java_package = "codes.mydna.lib.grpc";
+option java_outer_classname = "EnzymeServiceProto";
+option java_multiple_files = false;
+
+import "common.proto";
+
+service EnzymeService {
+  rpc getMultipleEnzymes(MultipleEnzymesRequest) returns (MultipleEnzymesResponse) {};
+}
+
+message MultipleEnzymesRequest {
+  repeated string id = 1;
+}
+
+message MultipleEnzymesResponse {
+  repeated Enzyme enzyme = 1;
+}
+
+message Enzyme {
+  BaseSequenceInfo baseSequenceInfo = 1;
+  Sequence sequence = 2;
+  string entityStatus = 3;
+}

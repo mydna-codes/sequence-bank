@@ -51,6 +51,6 @@ kumuluzee:
         - jndi-name: jdbc/sequence-bank-db
           changelog: db/db.changelog-master.xml
           startup:
-            dropAll: false
+            dropAll: true
             update: true
 

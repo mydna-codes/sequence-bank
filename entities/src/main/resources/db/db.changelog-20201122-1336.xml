@@ -41,7 +41,9 @@
             <column name="created" type="timestamp"/>
             <column name="last_modified" type="timestamp"/>
             <!-- BaseSequence-->
-            <column name="name" type="varchar(128)"/>
+            <column name="name" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
             <!-- Table specific -->
             <!-- Foreign keys -->
             <column name="sequence_id" type="varchar(128)"/>
@@ -71,7 +73,9 @@
             <column name="created" type="timestamp"/>
             <column name="last_modified" type="timestamp"/>
             <!-- BaseSequence-->
-            <column name="name" type="varchar(128)"/>
+            <column name="name" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
             <!-- Table specific -->
             <!-- Foreign keys -->
             <column name="sequence_id" type="varchar(128)"/>
@@ -100,7 +104,9 @@
             <column name="created" type="timestamp"/>
             <column name="last_modified" type="timestamp"/>
             <!-- BaseSequence-->
-            <column name="name" type="varchar(128)"/>
+            <column name="name" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
             <!-- Table specific -->
             <!-- Foreign keys -->
             <column name="sequence_id" type="varchar(128)"/>
