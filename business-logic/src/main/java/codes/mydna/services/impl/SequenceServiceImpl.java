@@ -45,10 +45,12 @@ public class SequenceServiceImpl implements SequenceService {
         Assert.objectNotNull(sequence, Sequence.class);
         Assert.fieldNotEmpty(sequence.getValue(), "value", Sequence.class);
 
-        SequenceEntity sequenceEntity = SequenceMapper.toEntity(sequence);
-
         if (sequence.getValue().length() > type.getMaxSequenceLength())
             throw new BadRequestException("Sequence is too long!");
+
+        sequence.setValue(sequence.getValue().toUpperCase());
+
+        SequenceEntity sequenceEntity = SequenceMapper.toEntity(sequence);
 
         validateSequence(sequenceEntity, type);
 
@@ -68,25 +70,14 @@ public class SequenceServiceImpl implements SequenceService {
         if (sequence == null || sequence.getValue() == null || sequence.getValue().isEmpty())
             return SequenceMapper.fromEntity(old);
 
+        sequence.setValue(sequence.getValue().toUpperCase());
+
         SequenceEntity entity = SequenceMapper.toEntity(sequence);
         entity.setId(id);
 
         validateSequence(entity, type);
 
         return SequenceMapper.fromEntity(entity);
-    }
-
-    //    @Override
-    public boolean removeSequence(String id) {
-        SequenceEntity entity = getSequenceEntity(id);
-        if (entity == null)
-            return false;
-
-        em.getTransaction().begin();
-        em.remove(entity);
-        em.getTransaction().commit();
-
-        return true;
     }
 
     public SequenceEntity getSequenceEntity(String id) {
