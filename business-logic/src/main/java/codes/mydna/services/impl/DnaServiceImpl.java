@@ -1,12 +1,16 @@
 package codes.mydna.services.impl;
 
 import codes.mydna.entities.DnaEntity;
-import codes.mydna.exceptions.BadRequestException;
+import codes.mydna.entities.enums.SequenceType;
 import codes.mydna.exceptions.NotFoundException;
 import codes.mydna.lib.Dna;
+import codes.mydna.lib.Sequence;
 import codes.mydna.mappers.DnaMapper;
+import codes.mydna.mappers.SequenceMapper;
 import codes.mydna.services.DnaService;
+import codes.mydna.services.SequenceService;
 import codes.mydna.utils.EntityList;
+import codes.mydna.validation.Assert;
 import com.kumuluz.ee.rest.beans.QueryParameters;
 import com.kumuluz.ee.rest.utils.JPAUtils;
 
@@ -29,14 +33,17 @@ public class DnaServiceImpl implements DnaService {
     @Inject
     private EntityManager em;
 
+    @Inject
+    private SequenceService sequenceService;
+
     @PostConstruct
-    private void pc(){
+    private void pc() {
         uuid = UUID.randomUUID().toString();
         LOG.info(DnaServiceImpl.class.getSimpleName() + " with ID '" + uuid + "' is about to be initialized");
     }
 
     @PreDestroy
-    private void pd(){
+    private void pd() {
         LOG.info(DnaServiceImpl.class.getSimpleName() + " with ID '" + uuid + "' is about to be destroyed");
     }
 
@@ -52,12 +59,11 @@ public class DnaServiceImpl implements DnaService {
 
     @Override
     public Dna getDna(String id) {
-        if(id == null)
-            throw new BadRequestException("Id cannot be null.");
+        Assert.fieldNotEmpty(id, "id");
 
         DnaEntity entity = getDnaEntity(id);
         Dna dna = DnaMapper.fromEntity(entity);
-        if(dna == null)
+        if (dna == null)
             throw new NotFoundException(Dna.class, id);
 
         return dna;
@@ -66,12 +72,13 @@ public class DnaServiceImpl implements DnaService {
     @Override
     public Dna insertDna(Dna dna) {
 
-        if(dna == null)
-            throw new BadRequestException("Dna object not provided.");
-        if(dna.getName() == null || dna.getName().isEmpty())
-            throw new BadRequestException("Field 'name' of Dna object is invalid.");
+        Assert.objectNotNull(dna, Dna.class);
+        Assert.fieldNotEmpty(dna.getName(), "name", Dna.class);
 
         DnaEntity dnaEntity = DnaMapper.toEntity(dna);
+
+        Sequence insertedSequence = sequenceService.insertSequence(dna.getSequence(), SequenceType.DNA);
+        dnaEntity.setSequence(SequenceMapper.toEntity(insertedSequence));
 
         em.getTransaction().begin();
         em.persist(dnaEntity);
@@ -82,21 +89,19 @@ public class DnaServiceImpl implements DnaService {
 
     @Override
     public Dna updateDna(Dna dna, String id) {
-        if(id == null)
-            throw new BadRequestException("Id cannot be null.");
-        if(dna == null)
-            throw new BadRequestException("Dna object not provided.");
+
+        Assert.fieldNotNull(id, "id");
+        Assert.objectNotNull(dna, Dna.class);
 
         DnaEntity old = getDnaEntity(id);
-        if(old == null)
+        if (old == null)
             throw new NotFoundException(Dna.class, id);
 
         DnaEntity entity = DnaMapper.toEntity(dna);
         entity.setId(id);
 
-        // Prevent cascade update if sequence is null or empty
-        if(entity.getSequence() == null || entity.getSequence().getValue().isEmpty())
-            entity.setSequence(old.getSequence());
+        Sequence updatedSequence = sequenceService.updateSequence(dna.getSequence(), SequenceType.DNA, id);
+        entity.setSequence(SequenceMapper.toEntity(updatedSequence));
 
         em.getTransaction().begin();
         em.merge(entity);
@@ -108,7 +113,7 @@ public class DnaServiceImpl implements DnaService {
     @Override
     public boolean removeDna(String id) {
         DnaEntity entity = getDnaEntity(id);
-        if(entity == null)
+        if (entity == null)
             return false;
 
         em.getTransaction().begin();
@@ -118,8 +123,8 @@ public class DnaServiceImpl implements DnaService {
         return true;
     }
 
-    public DnaEntity getDnaEntity(String id){
-        if(id == null)
+    public DnaEntity getDnaEntity(String id) {
+        if (id == null)
             return null;
         return em.find(DnaEntity.class, id);
     }

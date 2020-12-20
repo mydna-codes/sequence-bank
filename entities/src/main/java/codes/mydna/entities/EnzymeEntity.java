@@ -14,4 +14,19 @@ public class EnzymeEntity extends BaseSequenceEntity {
     @Column(name = "LOWER_CUT")
     private Integer lowerCut;
 
+    public Integer getUpperCut() {
+        return upperCut;
+    }
+
+    public void setUpperCut(Integer upperCut) {
+        this.upperCut = upperCut;
+    }
+
+    public Integer getLowerCut() {
+        return lowerCut;
+    }
+
+    public void setLowerCut(Integer lowerCut) {
+        this.lowerCut = lowerCut;
+    }
 }

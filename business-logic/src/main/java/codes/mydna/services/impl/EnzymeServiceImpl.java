@@ -1,12 +1,17 @@
 package codes.mydna.services.impl;
 
 import codes.mydna.entities.EnzymeEntity;
+import codes.mydna.entities.enums.SequenceType;
 import codes.mydna.exceptions.BadRequestException;
 import codes.mydna.exceptions.NotFoundException;
 import codes.mydna.lib.Enzyme;
+import codes.mydna.lib.Sequence;
 import codes.mydna.mappers.EnzymeMapper;
+import codes.mydna.mappers.SequenceMapper;
 import codes.mydna.services.EnzymeService;
+import codes.mydna.services.SequenceService;
 import codes.mydna.utils.EntityList;
+import codes.mydna.validation.Assert;
 import com.kumuluz.ee.rest.beans.QueryParameters;
 import com.kumuluz.ee.rest.utils.JPAUtils;
 
@@ -29,14 +34,17 @@ public class EnzymeServiceImpl implements EnzymeService {
     @Inject
     private EntityManager em;
 
+    @Inject
+    private SequenceService sequenceService;
+
     @PostConstruct
-    private void pc(){
+    private void pc() {
         uuid = UUID.randomUUID().toString();
         LOG.info(EnzymeServiceImpl.class.getSimpleName() + " with ID '" + uuid + "' is about to be initialized");
     }
 
     @PreDestroy
-    private void pd(){
+    private void pd() {
         LOG.info(EnzymeServiceImpl.class.getSimpleName() + " with ID '" + uuid + "' is about to be destroyed");
     }
 
@@ -52,12 +60,11 @@ public class EnzymeServiceImpl implements EnzymeService {
 
     @Override
     public Enzyme getEnzyme(String id) {
-        if(id == null)
-            throw new BadRequestException("Id cannot be null.");
+        Assert.fieldNotNull(id, "id");
 
         EnzymeEntity entity = getEnzymeEntity(id);
         Enzyme enzyme = EnzymeMapper.fromEntity(entity);
-        if(enzyme == null)
+        if (enzyme == null)
             throw new NotFoundException(Enzyme.class, id);
 
         return enzyme;
@@ -66,12 +73,15 @@ public class EnzymeServiceImpl implements EnzymeService {
     @Override
     public Enzyme insertEnzyme(Enzyme enzyme) {
 
-        if(enzyme == null)
-            throw new BadRequestException("Enzyme object not provided.");
-        if(enzyme.getName() == null || enzyme.getName().isEmpty())
-            throw new BadRequestException("Field 'name' of Enzyme object is invalid.");
+        Assert.objectNotNull(enzyme, Enzyme.class);
+        Assert.fieldNotEmpty(enzyme.getName(), "name", Enzyme.class);
 
         EnzymeEntity enzymeEntity = EnzymeMapper.toEntity(enzyme);
+
+        Sequence insertedSequence = sequenceService.insertSequence(enzyme.getSequence(), SequenceType.ENZYME);
+        enzymeEntity.setSequence(SequenceMapper.toEntity(insertedSequence));
+
+        validateEnzymeCuts(enzymeEntity);
 
         em.getTransaction().begin();
         em.persist(enzymeEntity);
@@ -82,21 +92,30 @@ public class EnzymeServiceImpl implements EnzymeService {
 
     @Override
     public Enzyme updateEnzyme(Enzyme enzyme, String id) {
-        if(id == null)
-            throw new BadRequestException("Id cannot be null.");
-        if(enzyme == null)
-            throw new BadRequestException("Enzyme object not provided.");
+
+        Assert.fieldNotNull(id, "id");
+        Assert.objectNotNull(enzyme, Enzyme.class);
 
         EnzymeEntity old = getEnzymeEntity(id);
-        if(old == null)
-            throw new NotFoundException(Enzyme.class, id);
+        if (old == null) throw new NotFoundException(Enzyme.class, id);
 
         EnzymeEntity entity = EnzymeMapper.toEntity(enzyme);
         entity.setId(id);
 
-        // Prevent cascade update if sequence is null or empty
-        if(entity.getSequence() == null || entity.getSequence().getValue().isEmpty())
-            entity.setSequence(old.getSequence());
+        Sequence updatedSeq = sequenceService.updateSequence(enzyme.getSequence(), SequenceType.ENZYME, old.getSequence().getId());
+        entity.setSequence(SequenceMapper.toEntity(updatedSeq));
+
+        // Dynamic update "upperCut"
+        entity.setUpperCut(enzyme.getUpperCut() == null
+                ? old.getUpperCut()
+                : enzyme.getUpperCut());
+
+        // Dynamic update "lowerCut"
+        entity.setLowerCut(enzyme.getLowerCut() == null
+                ? old.getLowerCut()
+                : enzyme.getLowerCut());
+
+        validateEnzymeCuts(entity);
 
         em.getTransaction().begin();
         em.merge(entity);
@@ -108,7 +127,7 @@ public class EnzymeServiceImpl implements EnzymeService {
     @Override
     public boolean removeEnzyme(String id) {
         EnzymeEntity entity = getEnzymeEntity(id);
-        if(entity == null)
+        if (entity == null)
             return false;
 
         em.getTransaction().begin();
@@ -118,10 +137,30 @@ public class EnzymeServiceImpl implements EnzymeService {
         return true;
     }
 
-    public EnzymeEntity getEnzymeEntity(String id){
-        if(id == null)
+    public EnzymeEntity getEnzymeEntity(String id) {
+        if (id == null)
             return null;
         return em.find(EnzymeEntity.class, id);
+    }
+
+    // Must be called after sequence is set
+    private void validateEnzymeCuts(EnzymeEntity enzyme) {
+
+        Assert.fieldNotNull(enzyme.getUpperCut(), "upperCut", Enzyme.class);
+        Assert.fieldNotNull(enzyme.getLowerCut(), "lowerCut", Enzyme.class);
+
+        if (enzyme.getUpperCut() >= enzyme.getSequence().getValue().length())
+            throw new BadRequestException("Enzyme cannot be updated because 'upperCut' cannot be bigger than sequence length.");
+
+        if (enzyme.getUpperCut() < 0)
+            throw new BadRequestException("Enzyme cannot be updated because 'upperCut' cannot be less than 0.");
+
+        if (enzyme.getLowerCut() >= enzyme.getSequence().getValue().length())
+            throw new BadRequestException("Enzyme cannot be updated because 'lowerCut' cannot be bigger than sequence length.");
+
+        if (enzyme.getLowerCut() < enzyme.getUpperCut())
+            throw new BadRequestException("Enzyme cannot be updated because 'lowerCut' cannot be smaller than upperCut.");
+
     }
 
 }

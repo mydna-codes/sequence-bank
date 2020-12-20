@@ -1,12 +1,16 @@
 package codes.mydna.services.impl;
 
 import codes.mydna.entities.GeneEntity;
-import codes.mydna.exceptions.BadRequestException;
+import codes.mydna.entities.enums.SequenceType;
 import codes.mydna.exceptions.NotFoundException;
 import codes.mydna.lib.Gene;
+import codes.mydna.lib.Sequence;
 import codes.mydna.mappers.GeneMapper;
+import codes.mydna.mappers.SequenceMapper;
 import codes.mydna.services.GeneService;
+import codes.mydna.services.SequenceService;
 import codes.mydna.utils.EntityList;
+import codes.mydna.validation.Assert;
 import com.kumuluz.ee.rest.beans.QueryParameters;
 import com.kumuluz.ee.rest.utils.JPAUtils;
 
@@ -29,14 +33,17 @@ public class GeneServiceImpl implements GeneService {
     @Inject
     private EntityManager em;
 
+    @Inject
+    private SequenceService sequenceService;
+
     @PostConstruct
-    private void pc(){
+    private void pc() {
         uuid = UUID.randomUUID().toString();
         LOG.info(GeneServiceImpl.class.getSimpleName() + " with ID '" + uuid + "' is about to be initialized");
     }
 
     @PreDestroy
-    private void pd(){
+    private void pd() {
         LOG.info(GeneServiceImpl.class.getSimpleName() + " with ID '" + uuid + "' is about to be destroyed");
     }
 
@@ -52,12 +59,12 @@ public class GeneServiceImpl implements GeneService {
 
     @Override
     public Gene getGene(String id) {
-        if(id == null)
-            throw new BadRequestException("Id cannot be null.");
+
+        Assert.fieldNotNull(id, "id");
 
         GeneEntity entity = getGeneEntity(id);
         Gene gene = GeneMapper.fromEntity(entity);
-        if(gene == null)
+        if (gene == null)
             throw new NotFoundException(Gene.class, id);
 
         return gene;
@@ -66,12 +73,13 @@ public class GeneServiceImpl implements GeneService {
     @Override
     public Gene insertGene(Gene gene) {
 
-        if(gene == null)
-            throw new BadRequestException("Gene object not provided.");
-        if(gene.getName() == null || gene.getName().isEmpty())
-            throw new BadRequestException("Field 'name' of Gene object is invalid.");
+        Assert.objectNotNull(gene, Gene.class);
+        Assert.fieldNotEmpty(gene.getName(), "name", Gene.class);
 
         GeneEntity geneEntity = GeneMapper.toEntity(gene);
+
+        Sequence insertSequence = sequenceService.insertSequence(gene.getSequence(), SequenceType.GENE);
+        geneEntity.setSequence(SequenceMapper.toEntity(insertSequence));
 
         em.getTransaction().begin();
         em.persist(geneEntity);
@@ -82,21 +90,19 @@ public class GeneServiceImpl implements GeneService {
 
     @Override
     public Gene updateGene(Gene gene, String id) {
-        if(id == null)
-            throw new BadRequestException("Id cannot be null.");
-        if(gene == null)
-            throw new BadRequestException("Gene object not provided.");
+
+        Assert.fieldNotNull(id, "id");
+        Assert.objectNotNull(gene, Gene.class);
 
         GeneEntity old = getGeneEntity(id);
-        if(old == null)
+        if (old == null)
             throw new NotFoundException(Gene.class, id);
 
         GeneEntity entity = GeneMapper.toEntity(gene);
         entity.setId(id);
 
-        // Prevent cascade update if sequence is null or empty
-        if(entity.getSequence() == null || entity.getSequence().getValue().isEmpty())
-            entity.setSequence(old.getSequence());
+        Sequence updatedSequence = sequenceService.updateSequence(gene.getSequence(), SequenceType.GENE, id);
+        entity.setSequence(SequenceMapper.toEntity(updatedSequence));
 
         em.getTransaction().begin();
         em.merge(entity);
@@ -108,7 +114,7 @@ public class GeneServiceImpl implements GeneService {
     @Override
     public boolean removeGene(String id) {
         GeneEntity entity = getGeneEntity(id);
-        if(entity == null)
+        if (entity == null)
             return false;
 
         em.getTransaction().begin();
@@ -118,8 +124,8 @@ public class GeneServiceImpl implements GeneService {
         return true;
     }
 
-    public GeneEntity getGeneEntity(String id){
-        if(id == null)
+    public GeneEntity getGeneEntity(String id) {
+        if (id == null)
             return null;
         return em.find(GeneEntity.class, id);
     }
