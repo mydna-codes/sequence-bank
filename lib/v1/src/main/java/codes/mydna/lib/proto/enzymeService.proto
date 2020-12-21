@@ -21,4 +21,6 @@ message Enzyme {
   BaseSequenceInfo baseSequenceInfo = 1;
   Sequence sequence = 2;
   string entityStatus = 3;
+  int32 upperCut = 4;
+  int32 lowerCut = 5;
 }

@@ -6,7 +6,4 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "DNA_TABLE")
 public class DnaEntity extends BaseSequenceEntity {
-
-
-
 }

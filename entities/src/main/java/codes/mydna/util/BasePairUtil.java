@@ -2,7 +2,6 @@ package codes.mydna.util;
 
 import codes.mydna.entities.enums.SequenceType;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class BasePairUtil {

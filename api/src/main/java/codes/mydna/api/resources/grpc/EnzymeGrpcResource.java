@@ -41,6 +41,8 @@ public class EnzymeGrpcResource extends EnzymeServiceGrpc.EnzymeServiceImplBase 
                             .setSequence(CommonProto.Sequence.newBuilder()
                                     .setValue(enzyme.getSequence().getValue())
                                     .build())
+                            .setUpperCut(enzyme.getUpperCut())
+                            .setLowerCut(enzyme.getLowerCut())
                             .setEntityStatus(Status.OK.name())
                             .build();
 
