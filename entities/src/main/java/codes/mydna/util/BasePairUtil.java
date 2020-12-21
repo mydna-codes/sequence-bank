@@ -2,7 +2,10 @@ package codes.mydna.util;
 
 import codes.mydna.entities.enums.SequenceType;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class BasePairUtil {
 
@@ -27,36 +30,110 @@ public class BasePairUtil {
         mapping.put('Y', new char[]{'C', 'T'});
     }
 
+    /**
+     * Validates if sequence contains only allowed characters.
+     *
+     * @param sequence - String to be validated
+     * @param type     - SequenceType [DNA, ENZYME, GENE]
+     * @return Returns true if sequence contains only allowed characters.
+     */
     public static boolean isSequenceValid(String sequence, SequenceType type) {
+        return sequence.matches(Arrays.toString(type.getValidCharacters()) + "+");
+    }
 
-        char[] valid = type.getValidCharacters();
+    /**
+     * Finds all occurrences of pattern in a string.
+     *
+     * @param sequence - String to be searched
+     * @param pattern  - Substring to be found in sequence (genes)
+     * @param type     - SequenceType [DNA, ENZYME, GENE]
+     * @return List of indexes where pattern was found
+     */
+    public static List<Integer> findAll(String sequence, String pattern, SequenceType type) {
+        if (type == SequenceType.ENZYME)
+            return findAllWithMapping(sequence, pattern);
+        return findAll(sequence, pattern);
+
+    }
+
+    /**
+     * Finds all occurrences of pattern in a string.
+     *
+     * @param sequence - String to be searched
+     * @param pattern  - Substring to be found in sequence (genes)
+     * @return List of indexes where pattern was found
+     */
+    private static List<Integer> findAll(String sequence, String pattern) {
+        List<Integer> indexes = new ArrayList<>();
+        int index = sequence.indexOf(pattern);
+        while (index >= 0) {
+            indexes.add(index);
+            index = sequence.indexOf(pattern, index + 1);
+        }
+        return indexes;
+    }
+
+    /**
+     * Finds all occurrences of pattern in a string using 'mapping' list.
+     *
+     * @param sequence - String to be searched
+     * @param pattern  - Substring to be found in sequence (enzymes/genes)
+     * @return List of indexes where pattern was found
+     */
+    private static List<Integer> findAllWithMapping(String sequence, String pattern) {
+
+        System.out.println("RADI");
+
+        List<Integer> indexes = new ArrayList<>();
+
         char[] seq = sequence.toCharArray();
-        boolean isValid;
+        char[] pat = pattern.toCharArray();
 
-        for (char seqChar : seq) {
-
-            isValid = false;
-
-            for (char c : valid) {
-                if (seqChar == c) {
-                    isValid = true;
+        boolean found;
+        for (int i = 0; i < seq.length - pat.length; i++) {
+            found = true;
+            for (int j = 0; j < pat.length; j++) {
+                if (!compare(pat[j], seq[i + j])) {
+                    found = false;
                     break;
                 }
             }
-
-            if(!isValid)
-                return false;
+            if (found)
+                indexes.add(i);
         }
-
-        return true;
+        return indexes;
     }
 
+    /**
+     * Compares if character 'any' equals character 'base'.
+     *
+     * @param any  - Any character from mapping
+     * @param base - One of the base characters [A, C, T, G]
+     */
     public static boolean compare(char any, char base) {
         char[] valid = mapping.get(any);
         for (char c : valid)
             if (c == base)
                 return true;
         return false;
+    }
+
+    /**
+     * Reverses string.
+     *
+     * @param str - String to be reversed
+     * @return Reversed string
+     */
+    private static String reverse(String str) {
+        char[] value = str.toCharArray();
+        int n = value.length - 1;
+        for (int j = (n - 1) >> 1; j >= 0; --j) {
+            char temp = value[j];
+            char temp2 = value[n - j];
+            value[j] = temp2;
+            value[n - j] = temp;
+        }
+        return String.valueOf(value);
     }
 
 }
