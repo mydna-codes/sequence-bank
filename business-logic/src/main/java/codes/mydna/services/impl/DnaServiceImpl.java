@@ -1,7 +1,7 @@
 package codes.mydna.services.impl;
 
 import codes.mydna.entities.DnaEntity;
-import codes.mydna.entities.enums.SequenceType;
+import codes.mydna.lib.enums.SequenceType;
 import codes.mydna.exceptions.NotFoundException;
 import codes.mydna.lib.Dna;
 import codes.mydna.lib.Sequence;

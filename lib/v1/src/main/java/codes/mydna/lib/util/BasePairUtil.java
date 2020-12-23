@@ -1,6 +1,6 @@
-package codes.mydna.util;
+package codes.mydna.lib.util;
 
-import codes.mydna.entities.enums.SequenceType;
+import codes.mydna.lib.enums.SequenceType;
 
 import java.util.ArrayList;
 import java.util.Arrays;

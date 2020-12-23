@@ -1,6 +1,6 @@
 package codes.mydna.services;
 
-import codes.mydna.entities.enums.SequenceType;
+import codes.mydna.lib.enums.SequenceType;
 import codes.mydna.lib.Sequence;
 
 /**

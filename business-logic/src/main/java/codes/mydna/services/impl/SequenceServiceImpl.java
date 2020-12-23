@@ -1,13 +1,13 @@
 package codes.mydna.services.impl;
 
 import codes.mydna.entities.SequenceEntity;
-import codes.mydna.entities.enums.SequenceType;
+import codes.mydna.lib.enums.SequenceType;
 import codes.mydna.exceptions.BadRequestException;
 import codes.mydna.exceptions.NotFoundException;
 import codes.mydna.lib.Sequence;
 import codes.mydna.mappers.SequenceMapper;
 import codes.mydna.services.SequenceService;
-import codes.mydna.util.BasePairUtil;
+import codes.mydna.lib.util.BasePairUtil;
 import codes.mydna.validation.Assert;
 
 import javax.annotation.PostConstruct;

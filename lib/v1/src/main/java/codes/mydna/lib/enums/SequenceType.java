@@ -1,4 +1,4 @@
-package codes.mydna.entities.enums;
+package codes.mydna.lib.enums;
 
 public enum SequenceType {
 
