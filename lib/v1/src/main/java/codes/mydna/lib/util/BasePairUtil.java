@@ -124,7 +124,7 @@ public class BasePairUtil {
      * @param str - String to be reversed
      * @return Reversed string
      */
-    private static String reverse(String str) {
+    public static String reverse(String str) {
         char[] value = str.toCharArray();
         int n = value.length - 1;
         for (int j = (n - 1) >> 1; j >= 0; --j) {
