@@ -25,8 +25,6 @@ kumuluzee:
   openapi-mp:
     enabled: true
     servers: http://localhost:8080
-    scan:
-      packages: codes.mydna.lib, codes.mydna.api
     ui:
       enabled: true
   health:
