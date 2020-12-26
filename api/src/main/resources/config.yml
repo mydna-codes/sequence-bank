@@ -7,6 +7,7 @@ kumuluzee:
   dev:
     scan-libraries:
       - rest-lib
+      - sequence-bank-lib-v1
   server:
     base-url: http://localhost:8080
     show-server-info: false
