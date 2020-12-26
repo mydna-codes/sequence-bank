@@ -81,6 +81,9 @@ public class EnzymeServiceImpl implements EnzymeService {
         Sequence insertedSequence = sequenceService.insertSequence(enzyme.getSequence(), SequenceType.ENZYME);
         enzymeEntity.setSequence(SequenceMapper.toEntity(insertedSequence));
 
+        // Add symmetric (mirrored) lower cut
+        enzymeEntity.setLowerCut(enzymeEntity.getSequence().getValue().length() - enzymeEntity.getUpperCut());
+
         validateEnzymeCuts(enzymeEntity);
 
         em.getTransaction().begin();
@@ -110,10 +113,8 @@ public class EnzymeServiceImpl implements EnzymeService {
                 ? old.getUpperCut()
                 : enzyme.getUpperCut());
 
-        // Dynamic update "lowerCut"
-        entity.setLowerCut(enzyme.getLowerCut() == null
-                ? old.getLowerCut()
-                : enzyme.getLowerCut());
+        // Add symmetric (mirrored) lower cut
+        entity.setLowerCut(entity.getSequence().getValue().length() - entity.getUpperCut());
 
         validateEnzymeCuts(entity);
 
@@ -149,18 +150,17 @@ public class EnzymeServiceImpl implements EnzymeService {
         Assert.fieldNotNull(enzyme.getUpperCut(), "upperCut", Enzyme.class);
         Assert.fieldNotNull(enzyme.getLowerCut(), "lowerCut", Enzyme.class);
 
-        if (enzyme.getUpperCut() >= enzyme.getSequence().getValue().length())
-            throw new BadRequestException("Enzyme cannot be updated because 'upperCut' cannot be bigger than sequence length.");
+        if (enzyme.getUpperCut() > enzyme.getSequence().getValue().length())
+            throw new BadRequestException("Enzyme is not valid because 'upperCut' cannot be bigger than sequence length.");
 
         if (enzyme.getUpperCut() < 0)
-            throw new BadRequestException("Enzyme cannot be updated because 'upperCut' cannot be less than 0.");
+            throw new BadRequestException("Enzyme is not valid because 'upperCut' cannot be less than 0.");
 
-        if (enzyme.getLowerCut() >= enzyme.getSequence().getValue().length())
-            throw new BadRequestException("Enzyme cannot be updated because 'lowerCut' cannot be bigger than sequence length.");
+        if (enzyme.getLowerCut() > enzyme.getSequence().getValue().length())
+            throw new BadRequestException("Enzyme is not valid because 'lowerCut' cannot be bigger than sequence length.");
 
-        if (enzyme.getLowerCut() < enzyme.getUpperCut())
-            throw new BadRequestException("Enzyme cannot be updated because 'lowerCut' cannot be smaller than upperCut.");
-
+        if (enzyme.getLowerCut() < 0)
+            throw new BadRequestException("Enzyme is not valid because 'lowerCut' cannot be less than 0.");
     }
 
 }
