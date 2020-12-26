@@ -104,6 +104,7 @@ public class EnzymeServiceImpl implements EnzymeService {
 
         EnzymeEntity entity = EnzymeMapper.toEntity(enzyme);
         entity.setId(id);
+        entity.setCreated(old.getCreated());
 
         Sequence updatedSeq = sequenceService.updateSequence(enzyme.getSequence(), SequenceType.ENZYME, old.getSequence().getId());
         entity.setSequence(SequenceMapper.toEntity(updatedSeq));
@@ -122,7 +123,7 @@ public class EnzymeServiceImpl implements EnzymeService {
         em.merge(entity);
         em.getTransaction().commit();
 
-        return EnzymeMapper.fromEntity(entity);
+        return EnzymeMapper.fromEntity(getEnzymeEntity(entity.getId()));
     }
 
     @Override

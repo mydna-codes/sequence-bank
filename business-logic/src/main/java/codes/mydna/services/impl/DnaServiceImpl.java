@@ -99,15 +99,16 @@ public class DnaServiceImpl implements DnaService {
 
         DnaEntity entity = DnaMapper.toEntity(dna);
         entity.setId(id);
+        entity.setCreated(old.getCreated());
 
-        Sequence updatedSequence = sequenceService.updateSequence(dna.getSequence(), SequenceType.DNA, id);
+        Sequence updatedSequence = sequenceService.updateSequence(dna.getSequence(), SequenceType.DNA, old.getSequence().getId());
         entity.setSequence(SequenceMapper.toEntity(updatedSequence));
 
         em.getTransaction().begin();
         em.merge(entity);
         em.getTransaction().commit();
 
-        return DnaMapper.fromEntity(entity);
+        return DnaMapper.fromEntity(getDnaEntity(entity.getId()));
     }
 
     @Override

@@ -26,6 +26,7 @@ kumuluzee:
     enabled: true
     servers: http://localhost:8080
     ui:
+      mapping: /openapi/ui
       enabled: true
   health:
     servlet:

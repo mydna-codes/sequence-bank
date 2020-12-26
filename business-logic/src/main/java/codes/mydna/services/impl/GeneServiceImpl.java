@@ -100,15 +100,16 @@ public class GeneServiceImpl implements GeneService {
 
         GeneEntity entity = GeneMapper.toEntity(gene);
         entity.setId(id);
+        entity.setCreated(old.getCreated());
 
-        Sequence updatedSequence = sequenceService.updateSequence(gene.getSequence(), SequenceType.GENE, id);
+        Sequence updatedSequence = sequenceService.updateSequence(gene.getSequence(), SequenceType.GENE, old.getSequence().getId());
         entity.setSequence(SequenceMapper.toEntity(updatedSequence));
 
         em.getTransaction().begin();
         em.merge(entity);
         em.getTransaction().commit();
 
-        return GeneMapper.fromEntity(entity);
+        return GeneMapper.fromEntity(getGeneEntity(entity.getId()));
     }
 
     @Override

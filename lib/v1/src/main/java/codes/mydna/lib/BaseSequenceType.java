@@ -1,10 +1,7 @@
 package codes.mydna.lib;
 
-import org.eclipse.microprofile.openapi.annotations.media.Schema;
-
 public class BaseSequenceType extends BaseType {
 
-    @Schema(description = "Sequence name", example = "My Sequence")
     private String name;
     private Sequence sequence;
 

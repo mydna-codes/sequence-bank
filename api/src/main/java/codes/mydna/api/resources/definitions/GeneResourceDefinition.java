@@ -2,12 +2,15 @@ package codes.mydna.api.resources.definitions;
 
 import codes.mydna.exceptions.RestException;
 import codes.mydna.lib.Gene;
+import codes.mydna.lib.openapi.examples.OpenApiGeneExamples;
+import codes.mydna.openapi.examples.OpenApiExceptionExamples;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.headers.Header;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 
@@ -26,14 +29,17 @@ public interface GeneResourceDefinition {
                     description = "Gene list returned successfully.",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(type = SchemaType.ARRAY, implementation = Gene.class)
+                            schema = @Schema(
+                                    type = SchemaType.ARRAY,
+                                    implementation = Gene.class,
+                                    example = OpenApiGeneExamples.Responses.GET_GENES
+                            )
                     ),
                     headers = {@Header(name = "X-Total-Count", schema = @Schema(type = SchemaType.INTEGER))}
             )
     })
     @GET
     public Response getGenes();
-
 
 
     @Operation(
@@ -46,7 +52,11 @@ public interface GeneResourceDefinition {
                     description = "Gene object returned successfully.",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(type = SchemaType.OBJECT, implementation = Gene.class)
+                            schema = @Schema(
+                                    type = SchemaType.OBJECT,
+                                    implementation = Gene.class,
+                                    example = OpenApiGeneExamples.Responses.GET_GENE
+                            )
                     )
             ),
             @APIResponse(
@@ -54,7 +64,11 @@ public interface GeneResourceDefinition {
                     description = "Empty or invalid input.",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(type = SchemaType.OBJECT, implementation = RestException.class)
+                            schema = @Schema(
+                                    type = SchemaType.OBJECT,
+                                    implementation = RestException.class,
+                                    example = OpenApiExceptionExamples.Response.BAD_REQUEST
+                            )
                     )
             ),
             @APIResponse(
@@ -62,15 +76,23 @@ public interface GeneResourceDefinition {
                     description = "Object with provided id does not exist.",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(type = SchemaType.OBJECT, implementation = RestException.class)
+                            schema = @Schema(
+                                    type = SchemaType.OBJECT,
+                                    implementation = RestException.class,
+                                    example = OpenApiExceptionExamples.Response.NOT_FOUND
+                            )
                     )
             )
     })
     @GET
     @Path("{id}")
     public Response getGene(
-            @Parameter(required = true, description = "Gene's id") @PathParam("id") String id);
-
+            @Parameter(
+                    required = true,
+                    description = "Gene's id",
+                    example = OpenApiGeneExamples.EXAMPLE_ID
+            )
+            @PathParam("id") String id);
 
 
     @Operation(
@@ -83,7 +105,11 @@ public interface GeneResourceDefinition {
                     description = "Gene inserted successfully.",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(type = SchemaType.OBJECT, implementation = Gene.class)
+                            schema = @Schema(
+                                    type = SchemaType.OBJECT,
+                                    implementation = Gene.class,
+                                    example = OpenApiGeneExamples.Responses.INSERT_GENE
+                            )
                     )
             ),
             @APIResponse(
@@ -91,7 +117,11 @@ public interface GeneResourceDefinition {
                     description = "Empty or invalid input.",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(type = SchemaType.OBJECT, implementation = RestException.class)
+                            schema = @Schema(
+                                    type = SchemaType.OBJECT,
+                                    implementation = RestException.class,
+                                    example = OpenApiExceptionExamples.Response.BAD_REQUEST
+                            )
                     )
             ),
             @APIResponse(
@@ -99,14 +129,28 @@ public interface GeneResourceDefinition {
                     description = "Object with provided id does not exist.",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(type = SchemaType.OBJECT, implementation = RestException.class)
+                            schema = @Schema(
+                                    type = SchemaType.OBJECT,
+                                    implementation = RestException.class,
+                                    example = OpenApiExceptionExamples.Response.NOT_FOUND
+                            )
                     )
             )
     })
+    @RequestBody(
+            required = true,
+            description = "Gene to be inserted",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(
+                            type = SchemaType.OBJECT,
+                            implementation = Gene.class,
+                            example = OpenApiGeneExamples.Requests.INSERT_GENE
+                    )
+            )
+    )
     @POST
-    public Response insertGene(
-            @Parameter(required = true, description = "Gene object to be inserted") Gene gene);
-
+    public Response insertGene(Gene gene);
 
 
     @Operation(
@@ -119,7 +163,11 @@ public interface GeneResourceDefinition {
                     description = "Gene updated successfully.",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(type = SchemaType.OBJECT, implementation = Gene.class)
+                            schema = @Schema(
+                                    type = SchemaType.OBJECT,
+                                    implementation = Gene.class,
+                                    example = OpenApiGeneExamples.Responses.UPDATE_GENE
+                            )
                     )
             ),
             @APIResponse(
@@ -127,7 +175,11 @@ public interface GeneResourceDefinition {
                     description = "Empty or invalid input.",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(type = SchemaType.OBJECT, implementation = RestException.class)
+                            schema = @Schema(
+                                    type = SchemaType.OBJECT,
+                                    implementation = RestException.class,
+                                    example = OpenApiExceptionExamples.Response.BAD_REQUEST
+                            )
                     )
             ),
             @APIResponse(
@@ -135,16 +187,36 @@ public interface GeneResourceDefinition {
                     description = "Object with provided id does not exist.",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(type = SchemaType.OBJECT, implementation = RestException.class)
+                            schema = @Schema(
+                                    type = SchemaType.OBJECT,
+                                    implementation = RestException.class,
+                                    example = OpenApiExceptionExamples.Response.NOT_FOUND
+                            )
                     )
             )
     })
+    @RequestBody(
+            required = true,
+            description = "Gene that will update the current one",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(
+                            type = SchemaType.OBJECT,
+                            implementation = Gene.class,
+                            example = OpenApiGeneExamples.Requests.UPDATE_GENE
+                    )
+            )
+    )
     @PUT
     @Path("{id}")
     public Response updateGene(
-            @Parameter(required = true, description = "Gene's id") @PathParam("id")  String id,
-            @Parameter(required = true, description = "New gene object") Gene gene);
-
+            @Parameter(
+                    required = true,
+                    description = "Gene's id",
+                    example = OpenApiGeneExamples.EXAMPLE_ID
+            )
+            @PathParam("id") String id,
+            Gene gene);
 
 
     @Operation(
@@ -157,13 +229,21 @@ public interface GeneResourceDefinition {
                     description = "Gene deleted successfully.",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(type = SchemaType.BOOLEAN)
+                            schema = @Schema(
+                                    type = SchemaType.BOOLEAN,
+                                    example = OpenApiGeneExamples.Responses.DELETE_GENE
+                            )
                     )
             )
     })
     @DELETE
     @Path("{id}")
     public Response deleteGene(
-            @Parameter(required = true, description = "Id of the gene that will be deleted") @PathParam("id") String id);
+            @Parameter(
+                    required = true,
+                    description = "Id of the gene that will be deleted",
+                    example = OpenApiGeneExamples.EXAMPLE_ID
+            )
+            @PathParam("id") String id);
 
 }

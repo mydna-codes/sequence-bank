@@ -9,27 +9,27 @@ import java.util.Date;
 public class BaseEntity {
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id", nullable = false, updatable = false, unique = true)
     @GeneratedValue(generator = "uuid-generator")
     @GenericGenerator(name = "uuid-generator", strategy = "uuid2")
     private String id;
 
-    @Column(name="created")
+    @Column(name="created", nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date created;
 
-    @Column(name="last_modified")
+    @Column(name="last_modified", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastModified;
 
     @PrePersist
-    private void onCreate(){
+    private void prePersist(){
         created = new Date();
         lastModified = created;
     }
 
     @PreUpdate
-    private void onUpdate(){
+    private void preUpdate(){
         lastModified = new Date();
     }
 
@@ -56,5 +56,4 @@ public class BaseEntity {
     public void setLastModified(Date lastModified) {
         this.lastModified = lastModified;
     }
-
 }

@@ -70,6 +70,7 @@ public class SequenceServiceImpl implements SequenceService {
         if (sequence == null || sequence.getValue() == null || sequence.getValue().isEmpty())
             return SequenceMapper.fromEntity(old);
 
+        sequence.setCreated(sequence.getCreated());
         sequence.setValue(sequence.getValue().toUpperCase());
 
         SequenceEntity entity = SequenceMapper.toEntity(sequence);
