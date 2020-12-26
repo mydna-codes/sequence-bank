@@ -140,7 +140,7 @@ pipeline {
                                   |Version: `${PROJECT_ARTIFACT_ID}:${PROJECT_VERSION}`\n
                                   |Branch:  *${GIT_BRANCH}*
                                   |Author:  ${COMMIT_AUTHOR}
-                                  |Message: ${COMMIT_MESSAGE}""".stripMargin(),
+                                  |Message: ${COMMIT_MESSAGE}""".stripMargin()
             )
         }
     }
