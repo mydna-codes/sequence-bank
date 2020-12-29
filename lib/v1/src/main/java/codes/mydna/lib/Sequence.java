@@ -11,4 +11,10 @@ public class Sequence extends BaseType {
     public void setValue(String value) {
         this.value = value;
     }
+
+    public int getLength(){
+        return (value == null)
+                ? 0
+                : value.length();
+    }
 }
