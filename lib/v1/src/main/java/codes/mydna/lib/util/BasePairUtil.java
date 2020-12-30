@@ -82,8 +82,6 @@ public class BasePairUtil {
      */
     private static List<Integer> findAllWithMapping(String sequence, String pattern) {
 
-        System.out.println("RADI");
-
         List<Integer> indexes = new ArrayList<>();
 
         char[] seq = sequence.toCharArray();
