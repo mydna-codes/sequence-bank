@@ -90,7 +90,7 @@ public class BasePairUtil {
         char[] pat = pattern.toCharArray();
 
         boolean found;
-        for (int i = 0; i < seq.length - pat.length; i++) {
+        for (int i = 0; i <= seq.length - pat.length; i++) {
             found = true;
             for (int j = 0; j < pat.length; j++) {
                 if (!compare(pat[j], seq[i + j])) {
