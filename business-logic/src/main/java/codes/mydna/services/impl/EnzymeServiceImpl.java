@@ -52,7 +52,7 @@ public class EnzymeServiceImpl implements EnzymeService {
     public EntityList<Enzyme> getEnzymes(QueryParameters qp) {
         List<Enzyme> enzymes = JPAUtils.queryEntities(em, EnzymeEntity.class, qp)
                 .stream()
-                .map(EnzymeMapper::fromEntityLazy)
+                .map(EnzymeMapper::fromEntity)
                 .collect(Collectors.toList());
         Long count = JPAUtils.queryEntitiesCount(em, EnzymeEntity.class);
         return new EntityList<>(enzymes, count);
