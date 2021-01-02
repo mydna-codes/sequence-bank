@@ -39,6 +39,12 @@ kumuluzee:
       disk-space-health-check:
         type: liveness
         threshold: 100000000
+  config:
+    namespace: env/dev
+    start-retry-delay-ms: 500
+    max-retry-delay-ms: 900000
+    etcd:
+      hosts: http://localhost:2379
   datasources:
     - jndi-name: jdbc/sequence-bank-db
       connection-url: jdbc:postgresql://localhost:5432/sequence-bank
@@ -56,3 +62,18 @@ kumuluzee:
             dropAll: false
             update: true
 
+mydnacodes:
+  limits:
+    max-dna-length: -1
+    guest:
+      max-dna-length: -1
+      max-gene-length: -1
+      max-enzyme-length: -1
+    reg:
+      max-dna-length: -1
+      max-gene-length: -1
+      max-enzyme-length: -1
+    pro:
+      max-dna-length: -1
+      max-gene-length: -1
+      max-enzyme-length: -1
