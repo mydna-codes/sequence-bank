@@ -6,7 +6,7 @@
 ```xml
 <dependency>
     <groupId>codes.mydna</groupId>
-    <artifactId>sequence-bank-lib</artifactId>
+    <artifactId>sequence-bank-lib-v1</artifactId>
     <version>${sequence-bank.version}</version>
 </dependency>
 ```

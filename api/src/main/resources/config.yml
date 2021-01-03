@@ -64,7 +64,6 @@ kumuluzee:
 
 mydnacodes:
   limits:
-    max-dna-length: -1
     guest:
       max-dna-length: -1
       max-gene-length: -1

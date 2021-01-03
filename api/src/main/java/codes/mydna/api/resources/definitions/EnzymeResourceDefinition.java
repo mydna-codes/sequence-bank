@@ -2,7 +2,7 @@ package codes.mydna.api.resources.definitions;
 
 import codes.mydna.exceptions.RestException;
 import codes.mydna.lib.Enzyme;
-import codes.mydna.lib.openapi.examples.OpenApiEnzymeExamples;
+import codes.mydna.api.resources.definitions.openapi.examples.OpenApiEnzymeExamples;
 import codes.mydna.openapi.examples.OpenApiExceptionExamples;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;

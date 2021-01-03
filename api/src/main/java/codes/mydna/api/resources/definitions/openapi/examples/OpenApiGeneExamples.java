@@ -1,4 +1,4 @@
-package codes.mydna.lib.openapi.examples;
+package codes.mydna.api.resources.definitions.openapi.examples;
 
 public class OpenApiGeneExamples {
 
