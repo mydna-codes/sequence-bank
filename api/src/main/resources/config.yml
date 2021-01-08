@@ -55,12 +55,21 @@ kumuluzee:
   migrations:
     enabled: true
     liquibase:
-      datasources:
+      changelogs:
         - jndi-name: jdbc/sequence-bank-db
-          changelog: db/db.changelog-master.xml
+          file: db/db.changelog-master.xml
           startup:
-            dropAll: false
+            drop-all: false
             update: true
+  security:
+    disable-jetty-auth: true
+    keycloak:
+      realm: "not_set"
+      bearer-only: true
+      auth-server-url: "not_set"
+      ssl-required: "external"
+      resource: "not_set"
+      confidential-port: 0
 
 mydnacodes:
   limits:

@@ -111,12 +111,13 @@ pipeline {
             steps {
                 script {
                     try {
-                        withKubeConfig([credentialsId: KUBERNETES_CREDENTIALS]) {
-                            sh "kubectl scale --replicas=0 deployment sequence-bank-app -n mydnacodes"
-                            sh "kubectl scale --replicas=1 deployment sequence-bank-app -n mydnacodes"
+                        if (!(env.GIT_BRANCH.equals("prod") || env.GIT_BRANCH.equals("origin/prod"))) {
+                            withKubeConfig([credentialsId: KUBERNETES_CREDENTIALS]) {
+                                sh "kubectl delete deployments.apps -n mydnacodes sequence-bank-app"
+                            }
                         }
                     } catch (Exception e) {
-                        echo "Deployment has not been scaled."
+                        echo "Deployment has not been deleted."
                         echo e.getMessage()
                     }
                 }

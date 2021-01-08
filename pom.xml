@@ -26,7 +26,9 @@
         <kumuluzee-security.version>1.2.0</kumuluzee-security.version>
         <kumuluzee-health.version>2.3.0</kumuluzee-health.version>
         <kumuluzee-config.version>1.3.0</kumuluzee-config.version>
-        <kumuluzee-migrations-liquibase.version>1.0.1-SNAPSHOT</kumuluzee-migrations-liquibase.version>
+        <kumuluzee-security.version>1.2.0</kumuluzee-security.version>
+        <keycloak.version>11.0.0</keycloak.version>
+        <kumuluzee-migrations-liquibase.version>1.0.2-SNAPSHOT</kumuluzee-migrations-liquibase.version>
 
         <!-- PostgreSQL -->
         <postgresql.version>42.2.18</postgresql.version>
@@ -127,6 +129,18 @@
                 <groupId>com.kumuluz.ee.config</groupId>
                 <artifactId>kumuluzee-config-etcd</artifactId>
                 <version>${kumuluzee-config.version}</version>
+            </dependency>
+
+            <!-- KumuluzEE (Keycloak) -->
+            <dependency>
+                <groupId>com.kumuluz.ee.security</groupId>
+                <artifactId>kumuluzee-security-keycloak</artifactId>
+                <version>${kumuluzee-security.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.keycloak</groupId>
+                <artifactId>keycloak-jetty94-adapter</artifactId>
+                <version>${keycloak.version}</version>
             </dependency>
 
             <!-- PostreSQL -->

@@ -1,8 +1,10 @@
 package codes.mydna.api.resources;
 
 import codes.mydna.api.resources.definitions.DemoResourceDefinition;
+import com.kumuluz.ee.security.annotations.Secure;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
+import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;
@@ -18,10 +20,12 @@ import java.io.InputStreamReader;
 @Tag(name = "Other")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@Secure
 @RequestScoped
 public class DemoResource implements DemoResourceDefinition {
 
     @Override
+    @RolesAllowed("mdc_admin")
     public Response demo() {
         StringBuilder content = new StringBuilder();
 

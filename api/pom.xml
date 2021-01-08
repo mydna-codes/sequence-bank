@@ -64,6 +64,14 @@
             <artifactId>kumuluzee-openapi-mp-ui</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.kumuluz.ee.security</groupId>
+            <artifactId>kumuluzee-security-keycloak</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-jetty94-adapter</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.kumuluz.ee.migrations</groupId>
             <artifactId>kumuluzee-migrations-liquibase</artifactId>
         </dependency>
