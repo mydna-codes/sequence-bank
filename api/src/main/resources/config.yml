@@ -61,15 +61,13 @@ kumuluzee:
           startup:
             drop-all: false
             update: true
-  security:
-    disable-jetty-auth: true
-    keycloak:
-      realm: "not_set"
-      bearer-only: true
-      auth-server-url: "not_set"
-      ssl-required: "external"
-      resource: "not_set"
-      confidential-port: 0
+
+keycloak:
+  realm: not_set
+  auth-server-url: not_set
+  client-id: not_set
+  auth:
+    client-secret: not_set
 
 mydnacodes:
   limits:
