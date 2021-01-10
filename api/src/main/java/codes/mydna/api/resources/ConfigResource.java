@@ -1,6 +1,6 @@
 package codes.mydna.api.resources;
 
-import codes.mydna.api.configurations.ConfigUserLimits;
+import codes.mydna.config.etcd.ConfigUserLimits;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;

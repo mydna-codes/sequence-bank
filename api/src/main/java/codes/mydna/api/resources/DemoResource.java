@@ -1,8 +1,6 @@
 package codes.mydna.api.resources;
 
 import codes.mydna.api.resources.definitions.DemoResourceDefinition;
-import com.mjamsek.auth.keycloak.annotations.RealmRolesAllowed;
-import com.mjamsek.auth.keycloak.annotations.SecureResource;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import javax.enterprise.context.RequestScoped;
@@ -20,12 +18,10 @@ import java.io.InputStreamReader;
 @Tag(name = "Other")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-@SecureResource
 @RequestScoped
 public class DemoResource implements DemoResourceDefinition {
 
     @Override
-    @RealmRolesAllowed({"mdc_admin", "mdc_user", "mdc_pro_user"})
     public Response demo() {
         StringBuilder content = new StringBuilder();
 

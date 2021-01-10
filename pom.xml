@@ -35,6 +35,7 @@
 
         <!-- Custom -->
         <mydnacodes-rest-lib.version>1.0.2-SNAPSHOT</mydnacodes-rest-lib.version>
+        <mydnacodes-config-lib.version>1.0.0-SNAPSHOT</mydnacodes-config-lib.version>
 
         <!-- Plugins -->
         <liquibase.version>4.2.0</liquibase.version>
@@ -163,6 +164,14 @@
                 <artifactId>rest-lib</artifactId>
                 <version>${mydnacodes-rest-lib.version}</version>
             </dependency>
+
+            <!-- Nexus - config lib -->
+            <dependency>
+                <groupId>codes.mydna</groupId>
+                <artifactId>config-lib</artifactId>
+                <version>${mydnacodes-config-lib.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
