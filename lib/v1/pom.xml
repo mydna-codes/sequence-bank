@@ -20,6 +20,10 @@
             <groupId>com.kumuluz.ee.grpc</groupId>
             <artifactId>kumuluzee-grpc</artifactId>
         </dependency>
+        <dependency>
+            <groupId>codes.mydna</groupId>
+            <artifactId>auth-common</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

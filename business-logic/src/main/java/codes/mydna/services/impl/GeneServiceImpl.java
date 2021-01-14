@@ -1,15 +1,19 @@
 package codes.mydna.services.impl;
 
+import codes.mydna.auth.common.models.User;
 import codes.mydna.entities.GeneEntity;
-import codes.mydna.lib.enums.SequenceType;
 import codes.mydna.exceptions.NotFoundException;
 import codes.mydna.lib.Gene;
 import codes.mydna.lib.Sequence;
+import codes.mydna.lib.enums.SequenceAccessType;
+import codes.mydna.lib.enums.SequenceType;
 import codes.mydna.mappers.GeneMapper;
 import codes.mydna.mappers.SequenceMapper;
 import codes.mydna.services.GeneService;
 import codes.mydna.services.SequenceService;
+import codes.mydna.util.AuthorizationUtil;
 import codes.mydna.utils.EntityList;
+import codes.mydna.utils.QueryUtil;
 import codes.mydna.validation.Assert;
 import com.kumuluz.ee.rest.beans.QueryParameters;
 import com.kumuluz.ee.rest.utils.JPAUtils;
@@ -19,6 +23,7 @@ import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -48,37 +53,60 @@ public class GeneServiceImpl implements GeneService {
     }
 
     @Override
-    public EntityList<Gene> getGenes(QueryParameters qp) {
-        List<Gene> genes = JPAUtils.queryEntities(em, GeneEntity.class, qp)
+    public EntityList<Gene> getGenes(QueryParameters qp, User user) {
+
+        String userId = (user == null) ? null : user.getId();
+
+        long limit = qp.getLimit();
+        long offset = qp.getOffset();
+        QueryParameters queryParameters = QueryUtil.removeLimitAndOffset(qp);
+
+        List<Gene> genes = JPAUtils.queryEntities(em, GeneEntity.class, queryParameters)
                 .stream()
+                .filter(entity ->
+                        entity.getOwnerId().equals(userId) || entity.getAccess().equals(SequenceAccessType.PUBLIC)
+                )
+                .skip(offset)
+                .limit(limit)
                 .map(GeneMapper::fromEntityLazy)
                 .collect(Collectors.toList());
-        Long count = JPAUtils.queryEntitiesCount(em, GeneEntity.class);
+
+        Long count = JPAUtils.queryEntitiesCount(em, GeneEntity.class, queryParameters, (p, cb, r)
+                -> (cb.and(p, cb.or(cb.equal(r.get("access"), SequenceAccessType.PUBLIC), cb.equal(r.get("ownerId"), userId)))));
+
         return new EntityList<>(genes, count);
     }
 
     @Override
-    public Gene getGene(String id) {
+    public Gene getGene(String id, User user) {
 
         Assert.fieldNotNull(id, "id");
 
-        GeneEntity entity = getGeneEntity(id);
-        Gene gene = GeneMapper.fromEntity(entity);
-        if (gene == null)
-            throw new NotFoundException(Gene.class, id);
+        try {
+            GeneEntity entity = (GeneEntity) em.createNamedQuery(GeneEntity.GET_PUBLIC_OR_BY_OWNER_ID)
+                    .setParameter("id", id)
+                    .setParameter("owner_id", user != null ? user.getId() : null)
+                    .getSingleResult();
+            return GeneMapper.fromEntity(entity);
 
-        return gene;
+        } catch (NoResultException e) {
+            throw new NotFoundException(Gene.class, id);
+        }
     }
 
     @Override
-    public Gene insertGene(Gene gene) {
+    public Gene insertGene(Gene gene, User user) {
 
+        Assert.userNotNull(user);
         Assert.objectNotNull(gene, Gene.class);
         Assert.fieldNotEmpty(gene.getName(), "name", Gene.class);
 
-        GeneEntity geneEntity = GeneMapper.toEntity(gene);
+        AuthorizationUtil.verifyModification(gene.getAccess(), user);
 
-        Sequence insertSequence = sequenceService.insertSequence(gene.getSequence(), SequenceType.GENE);
+        GeneEntity geneEntity = GeneMapper.toEntity(gene);
+        geneEntity.setOwnerId(user.getId());
+
+        Sequence insertSequence = sequenceService.insertSequence(gene.getSequence(), SequenceType.GENE, user);
         geneEntity.setSequence(SequenceMapper.toEntity(insertSequence));
 
         em.getTransaction().begin();
@@ -89,34 +117,44 @@ public class GeneServiceImpl implements GeneService {
     }
 
     @Override
-    public Gene updateGene(Gene gene, String id) {
+    public Gene updateGene(Gene gene, String id, User user) {
 
+        Assert.userNotNull(user);
         Assert.fieldNotNull(id, "id");
         Assert.objectNotNull(gene, Gene.class);
 
-        GeneEntity old = getGeneEntity(id);
-        if (old == null)
-            throw new NotFoundException(Gene.class, id);
+        GeneEntity old = getGeneEntity(id, user);
+        if (old == null) throw new NotFoundException(Gene.class, id);
+
+        // Only owner can update sequence
+        AuthorizationUtil.verifyOwner(old, user);
 
         GeneEntity entity = GeneMapper.toEntity(gene);
         entity.setId(id);
         entity.setCreated(old.getCreated());
 
-        Sequence updatedSequence = sequenceService.updateSequence(gene.getSequence(), SequenceType.GENE, old.getSequence().getId());
+        Sequence updatedSequence = sequenceService.updateSequence(gene.getSequence(), SequenceType.GENE, old.getSequence().getId(), user);
         entity.setSequence(SequenceMapper.toEntity(updatedSequence));
 
         em.getTransaction().begin();
         em.merge(entity);
         em.getTransaction().commit();
 
-        return GeneMapper.fromEntity(getGeneEntity(entity.getId()));
+        return GeneMapper.fromEntity(getGeneEntity(entity.getId(), user));
     }
 
     @Override
-    public boolean removeGene(String id) {
-        GeneEntity entity = getGeneEntity(id);
+    public boolean removeGene(String id, User user) {
+
+        Assert.userNotNull(user);
+
+        GeneEntity entity = getGeneEntity(id, user);
+
         if (entity == null)
             return false;
+
+        // Only owner can remove sequence
+        AuthorizationUtil.verifyOwner(entity, user);
 
         em.getTransaction().begin();
         em.remove(entity);
@@ -125,10 +163,16 @@ public class GeneServiceImpl implements GeneService {
         return true;
     }
 
-    public GeneEntity getGeneEntity(String id) {
-        if (id == null)
-            return null;
-        return em.find(GeneEntity.class, id);
-    }
 
+    public GeneEntity getGeneEntity(String id, User user) {
+        try {
+            return (GeneEntity) em.createNamedQuery(GeneEntity.GET_PUBLIC_OR_BY_OWNER_ID)
+                    .setParameter("id", id)
+                    .setParameter("owner_id", user.getId())
+                    .getSingleResult();
+
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 }

@@ -5,5 +5,6 @@
 
     <include file="db/db.changelog-20201122-1336.xml"/>
     <include file="db/db.changelog-20201220-1153.xml"/>
+    <include file="db/db.changelog-20210111-2023.xml"/>
 
 </databaseChangeLog>

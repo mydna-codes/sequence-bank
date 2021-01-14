@@ -1,6 +1,9 @@
 package codes.mydna.api.resources;
 
+import codes.mydna.auth.common.RealmRole;
 import codes.mydna.config.etcd.ConfigUserLimits;
+import com.mjamsek.auth.keycloak.annotations.RealmRolesAllowed;
+import com.mjamsek.auth.keycloak.annotations.SecureResource;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -14,6 +17,7 @@ import javax.ws.rs.core.Response;
 @Path("config")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@SecureResource
 @RequestScoped
 public class ConfigResource {
 
@@ -21,6 +25,7 @@ public class ConfigResource {
     private ConfigUserLimits config;
 
     @GET
+    @RealmRolesAllowed(RealmRole.ADMIN)
     public Response config(){
 
         String response = "{\n" +

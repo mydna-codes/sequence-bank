@@ -1,5 +1,8 @@
 package codes.mydna.api;
 
+
+
+import codes.mydna.auth.common.RealmRole;
 import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
 import org.eclipse.microprofile.openapi.annotations.info.Contact;
 import org.eclipse.microprofile.openapi.annotations.info.Info;
@@ -17,7 +20,7 @@ import javax.ws.rs.core.Application;
                 description = "API for storing sequences like DNAs, genes and enzymes"
         )
 )
-@DeclareRoles({"mdc_admin", "mdc_user", "mdc_pro_user"})
+@DeclareRoles({RealmRole.ADMIN, RealmRole.USER, RealmRole.PRO_USER})
 @ApplicationPath("v1")
 public class RestService extends Application {
 

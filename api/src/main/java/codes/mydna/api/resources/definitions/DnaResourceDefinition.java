@@ -20,8 +20,8 @@ import javax.ws.rs.core.Response;
 public interface DnaResourceDefinition {
 
     @Operation(
-            description = "Returns list of DNAs.",
-            summary = "Get list of DNAs"
+            description = "Returns list of user's DNAs.",
+            summary = "Get list of user's DNAs"
     )
     @APIResponses({
             @APIResponse(

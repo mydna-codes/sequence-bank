@@ -25,7 +25,6 @@
         <kumuluzee-cors.version>1.0.6</kumuluzee-cors.version>
         <kumuluzee-security.version>1.2.0</kumuluzee-security.version>
         <kumuluzee-health.version>2.3.0</kumuluzee-health.version>
-        <kumuluzee-config.version>1.3.0</kumuluzee-config.version>
         <kumuluzee-migrations-liquibase.version>1.0.2-SNAPSHOT</kumuluzee-migrations-liquibase.version>
         <kee-auth.version>1.0.0</kee-auth.version>
         <keycloak.version>11.0.0</keycloak.version>
@@ -36,6 +35,7 @@
         <!-- Custom -->
         <mydnacodes-rest-lib.version>1.0.2-SNAPSHOT</mydnacodes-rest-lib.version>
         <mydnacodes-config-lib.version>1.0.0-SNAPSHOT</mydnacodes-config-lib.version>
+        <mydnacodes-auth-lib.version>1.0.0-SNAPSHOT</mydnacodes-auth-lib.version>
 
         <!-- Plugins -->
         <liquibase.version>4.2.0</liquibase.version>
@@ -125,25 +125,6 @@
                 <version>${kumuluzee-openapi-mp.version}</version>
             </dependency>
 
-            <!-- KumuluzEE (ETCD configuration server) -->
-            <dependency>
-                <groupId>com.kumuluz.ee.config</groupId>
-                <artifactId>kumuluzee-config-etcd</artifactId>
-                <version>${kumuluzee-config.version}</version>
-            </dependency>
-
-            <!-- KumuluzEE (Keycloak) -->
-            <dependency>
-                <groupId>org.keycloak</groupId>
-                <artifactId>keycloak-jetty94-adapter</artifactId>
-                <version>${keycloak.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.mjamsek.auth</groupId>
-                <artifactId>kee-auth</artifactId>
-                <version>${kee-auth.version}</version>
-            </dependency>
-
             <!-- PostreSQL -->
             <dependency>
                 <groupId>org.postgresql</groupId>
@@ -168,8 +149,25 @@
             <!-- Nexus - config lib -->
             <dependency>
                 <groupId>codes.mydna</groupId>
-                <artifactId>config-lib</artifactId>
+                <artifactId>config-etcd</artifactId>
                 <version>${mydnacodes-config-lib.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>codes.mydna</groupId>
+                <artifactId>config-etcd-keycloak-rbac</artifactId>
+                <version>${mydnacodes-config-lib.version}</version>
+            </dependency>
+
+            <!-- Nexus - auth lib -->
+            <dependency>
+                <groupId>codes.mydna</groupId>
+                <artifactId>auth-common</artifactId>
+                <version>${mydnacodes-auth-lib.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>codes.mydna</groupId>
+                <artifactId>auth-keycloak</artifactId>
+                <version>${mydnacodes-auth-lib.version}</version>
             </dependency>
 
         </dependencies>

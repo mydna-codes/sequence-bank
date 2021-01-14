@@ -5,6 +5,7 @@ import codes.mydna.lib.Enzyme;
 import codes.mydna.lib.grpc.CommonProto;
 import codes.mydna.lib.grpc.EnzymeServiceGrpc;
 import codes.mydna.lib.grpc.EnzymeServiceProto;
+import codes.mydna.lib.mappers.grpc.GrpcUserMapper;
 import codes.mydna.services.EnzymeService;
 import codes.mydna.status.Status;
 import com.kumuluz.ee.grpc.annotations.GrpcService;
@@ -32,7 +33,7 @@ public class EnzymeGrpcResource extends EnzymeServiceGrpc.EnzymeServiceImplBase 
 
                 EnzymeServiceProto.Enzyme protoEnzyme;
                 try {
-                    Enzyme enzyme = enzymeService.getEnzyme(id);
+                    Enzyme enzyme = enzymeService.getEnzyme(id, GrpcUserMapper.fromGrpcUser(request.getUser()));
                     protoEnzyme = EnzymeServiceProto.Enzyme.newBuilder()
                             .setBaseSequenceInfo(CommonProto.BaseSequenceInfo.newBuilder()
                                     .setId(enzyme.getId())

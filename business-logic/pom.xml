@@ -19,10 +19,6 @@
             <groupId>codes.mydna</groupId>
             <artifactId>entities</artifactId>
         </dependency>
-        <dependency>
-            <groupId>codes.mydna</groupId>
-            <artifactId>sequence-bank-lib-v1</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>com.kumuluz.ee</groupId>
@@ -48,10 +44,6 @@
             <groupId>com.kumuluz.ee</groupId>
             <artifactId>kumuluzee-json-b-yasson</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.kumuluz.ee.config</groupId>
-            <artifactId>kumuluzee-config-etcd</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>codes.mydna</groupId>
@@ -59,7 +51,14 @@
         </dependency>
         <dependency>
             <groupId>codes.mydna</groupId>
-            <artifactId>config-lib</artifactId>
+            <artifactId>config-etcd</artifactId>
+        </dependency>        <dependency>
+            <groupId>codes.mydna</groupId>
+            <artifactId>config-etcd-keycloak-rbac</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>codes.mydna</groupId>
+            <artifactId>auth-keycloak</artifactId>
         </dependency>
     </dependencies>
 

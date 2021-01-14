@@ -5,6 +5,7 @@ import codes.mydna.lib.Gene;
 import codes.mydna.lib.grpc.CommonProto;
 import codes.mydna.lib.grpc.GeneServiceGrpc;
 import codes.mydna.lib.grpc.GeneServiceProto;
+import codes.mydna.lib.mappers.grpc.GrpcUserMapper;
 import codes.mydna.services.GeneService;
 import codes.mydna.status.Status;
 import com.kumuluz.ee.grpc.annotations.GrpcService;
@@ -32,7 +33,7 @@ public class GeneGrpcResource extends GeneServiceGrpc.GeneServiceImplBase {
 
                 GeneServiceProto.Gene protoGene;
                 try {
-                    Gene gene = geneService.getGene(id);
+                    Gene gene = geneService.getGene(id, GrpcUserMapper.fromGrpcUser(request.getUser()));
                     protoGene = GeneServiceProto.Gene.newBuilder()
                             .setBaseSequenceInfo(CommonProto.BaseSequenceInfo.newBuilder()
                                     .setId(gene.getId())

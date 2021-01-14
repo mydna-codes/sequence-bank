@@ -1,13 +1,15 @@
 package codes.mydna.services.impl;
 
+import codes.mydna.auth.common.models.User;
 import codes.mydna.entities.SequenceEntity;
-import codes.mydna.lib.enums.SequenceType;
+import codes.mydna.etcd.rbac.keycloak.UserLimits;
 import codes.mydna.exceptions.BadRequestException;
 import codes.mydna.exceptions.NotFoundException;
 import codes.mydna.lib.Sequence;
+import codes.mydna.lib.enums.SequenceType;
+import codes.mydna.lib.util.BasePairUtil;
 import codes.mydna.mappers.SequenceMapper;
 import codes.mydna.services.SequenceService;
-import codes.mydna.lib.util.BasePairUtil;
 import codes.mydna.validation.Assert;
 
 import javax.annotation.PostConstruct;
@@ -15,6 +17,7 @@ import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.ws.rs.InternalServerErrorException;
 import java.util.Arrays;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -28,6 +31,9 @@ public class SequenceServiceImpl implements SequenceService {
     @Inject
     private EntityManager em;
 
+    @Inject
+    private UserLimits userLimits;
+
     @PostConstruct
     private void pc() {
         uuid = UUID.randomUUID().toString();
@@ -40,25 +46,24 @@ public class SequenceServiceImpl implements SequenceService {
     }
 
     @Override
-    public Sequence insertSequence(Sequence sequence, SequenceType type) {
+    public Sequence insertSequence(Sequence sequence, SequenceType type, User user) {
 
         Assert.objectNotNull(sequence, Sequence.class);
         Assert.fieldNotEmpty(sequence.getValue(), "value", Sequence.class);
 
-        if (sequence.getValue().length() > type.getMaxSequenceLength())
-            throw new BadRequestException("Sequence is too long!");
+        validateSequenceLength(sequence.getValue(), type, user);
 
         sequence.setValue(sequence.getValue().toUpperCase());
 
         SequenceEntity sequenceEntity = SequenceMapper.toEntity(sequence);
 
-        validateSequence(sequenceEntity, type);
+        validateSequence(sequenceEntity, type, user);
 
         return SequenceMapper.fromEntity(sequenceEntity);
     }
 
     @Override
-    public Sequence updateSequence(Sequence sequence, SequenceType type, String id) {
+    public Sequence updateSequence(Sequence sequence, SequenceType type, String id, User user) {
 
         Assert.fieldNotNull(id, "id");
 
@@ -76,7 +81,7 @@ public class SequenceServiceImpl implements SequenceService {
         SequenceEntity entity = SequenceMapper.toEntity(sequence);
         entity.setId(id);
 
-        validateSequence(entity, type);
+        validateSequence(entity, type, user);
 
         return SequenceMapper.fromEntity(entity);
     }
@@ -87,15 +92,34 @@ public class SequenceServiceImpl implements SequenceService {
         return em.find(SequenceEntity.class, id);
     }
 
-    private void validateSequence(SequenceEntity sequence, SequenceType type) {
+    private void validateSequence(SequenceEntity sequence, SequenceType type, User user) {
+        validateSequenceLength(sequence.getValue(), type, user);
+        validateSequenceContent(sequence, type);
+    }
 
-        // Length validation
-        if (sequence.getValue().length() > type.getMaxSequenceLength())
+    private void validateSequenceLength(String sequence, SequenceType type, User user){
+        int maxLength;
+
+        if(type == SequenceType.DNA) {
+            maxLength = userLimits.getMaxDnaLength(user);
+        } else if (type == SequenceType.ENZYME) {
+            maxLength = userLimits.getMaxEnzymeLength(user);
+        } else if (type == SequenceType.GENE) {
+            maxLength = userLimits.getMaxGeneLength(user);
+        } else {
+            throw new InternalServerErrorException("Provided SequenceType does not exist");
+        }
+
+        if (sequence.length() > maxLength) {
             throw new BadRequestException("Sequence is too long!");
+        }
+    }
 
-        // Content validation
-        if (!BasePairUtil.isSequenceValid(sequence.getValue(), type))
-            throw new BadRequestException("Sequence contains invalid characters! Valid characters are: " + Arrays.toString(type.getValidCharacters()));
+    private void validateSequenceContent(SequenceEntity sequence, SequenceType type){
+        if (!BasePairUtil.isSequenceValid(sequence.getValue(), type)) {
+            throw new BadRequestException("Sequence contains invalid characters! Valid characters are: "
+                    + Arrays.toString(type.getValidCharacters()));
+        }
     }
 
 }

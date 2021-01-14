@@ -10,7 +10,8 @@ service GeneService {
 }
 
 message MultipleGenesRequest {
-  repeated string id = 1;
+  User user = 1;
+  repeated string id = 2;
 }
 
 message MultipleGenesResponse {

@@ -10,7 +10,8 @@ service DnaService {
 }
 
 message DnaRequest {
-  string id = 1;
+  User user = 1;
+  string id = 2;
 }
 
 message DnaResponse {

@@ -1,12 +1,28 @@
 package codes.mydna.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "ENZYME_TABLE")
+@NamedQueries({
+        @NamedQuery(
+                name = EnzymeEntity.GET_PUBLIC_OR_BY_OWNER_ID,
+                query = "SELECT e FROM EnzymeEntity e WHERE (e.access = 'PUBLIC' OR e.ownerId = :owner_id) AND e.id = :id"
+        ),
+        @NamedQuery(
+                name = EnzymeEntity.GET_BY_OWNER_ID,
+                query = "SELECT e FROM EnzymeEntity e WHERE e.ownerId = :owner_id AND e.id = :id"
+        ),
+        @NamedQuery(
+                name = EnzymeEntity.GET_ALL_BY_OWNER_ID,
+                query = "SELECT e FROM EnzymeEntity e WHERE e.ownerId = :owner_id"
+        )
+})
 public class EnzymeEntity extends BaseSequenceEntity {
+
+    public static final String GET_PUBLIC_OR_BY_OWNER_ID = "EnzymeEntity.GET_PUBLIC_OR_BY_OWNER_ID";
+    public static final String GET_BY_OWNER_ID = "EnzymeEntity.GET_ONE_BY_OWNER_ID";
+    public static final String GET_ALL_BY_OWNER_ID = "EnzymeEntity.GET_ALL_BY_OWNER_ID";
 
     @Column(name = "UPPER_CUT")
     private Integer upperCut;

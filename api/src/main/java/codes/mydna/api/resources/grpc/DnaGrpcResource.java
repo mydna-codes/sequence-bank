@@ -5,6 +5,7 @@ import codes.mydna.lib.Dna;
 import codes.mydna.lib.grpc.CommonProto;
 import codes.mydna.lib.grpc.DnaServiceGrpc;
 import codes.mydna.lib.grpc.DnaServiceProto;
+import codes.mydna.lib.mappers.grpc.GrpcUserMapper;
 import codes.mydna.services.DnaService;
 import codes.mydna.status.Status;
 import com.kumuluz.ee.grpc.annotations.GrpcService;
@@ -27,7 +28,7 @@ public class DnaGrpcResource extends DnaServiceGrpc.DnaServiceImplBase {
 
             DnaServiceProto.Dna dnaResponse;
             try {
-                Dna dna = dnaService.getDna(request.getId());
+                Dna dna = dnaService.getDna(request.getId(), GrpcUserMapper.fromGrpcUser(request.getUser()));
                 dnaResponse = DnaServiceProto.Dna.newBuilder()
                         .setBaseSequenceInfo(CommonProto.BaseSequenceInfo.newBuilder()
                                 .setId(dna.getId())

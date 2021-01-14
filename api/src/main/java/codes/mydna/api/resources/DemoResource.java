@@ -23,9 +23,9 @@ public class DemoResource implements DemoResourceDefinition {
 
     @Override
     public Response demo() {
-        StringBuilder content = new StringBuilder();
 
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("projectInfo.json")) {
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("projectInfo1.json")) {
+            StringBuilder content = new StringBuilder();
             if(inputStream != null){
                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
                 String line;
@@ -34,10 +34,11 @@ public class DemoResource implements DemoResourceDefinition {
                     content.append(System.lineSeparator());
                 }
             }
+            return Response.ok(content.toString()).build();
         } catch (IOException e) {
-            Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            return Response.serverError().build();
         }
-        return Response.ok(content.toString()).build();
+
     }
 
 }
