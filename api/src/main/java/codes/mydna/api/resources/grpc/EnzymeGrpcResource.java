@@ -2,13 +2,13 @@ package codes.mydna.api.resources.grpc;
 
 import codes.mydna.exceptions.RestException;
 import codes.mydna.lib.Enzyme;
-import codes.mydna.lib.grpc.CommonProto;
 import codes.mydna.lib.grpc.EnzymeServiceGrpc;
 import codes.mydna.lib.grpc.EnzymeServiceProto;
-import codes.mydna.lib.mappers.grpc.GrpcUserMapper;
+import codes.mydna.lib.grpc.mappers.GrpcEnzymeMapper;
+import codes.mydna.lib.grpc.mappers.GrpcUserMapper;
 import codes.mydna.services.EnzymeService;
-import codes.mydna.status.Status;
 import com.kumuluz.ee.grpc.annotations.GrpcService;
+import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 
 import javax.enterprise.inject.spi.CDI;
@@ -27,43 +27,28 @@ public class EnzymeGrpcResource extends EnzymeServiceGrpc.EnzymeServiceImplBase 
         var response = EnzymeServiceProto.MultipleEnzymesResponse.newBuilder();
 
         try {
-
             List<String> ids = request.getIdList();
+
             for (String id : ids) {
 
-                EnzymeServiceProto.Enzyme protoEnzyme;
+                EnzymeServiceProto.Enzyme grpcEnzyme;
+
                 try {
                     Enzyme enzyme = enzymeService.getEnzyme(id, GrpcUserMapper.fromGrpcUser(request.getUser()));
-                    protoEnzyme = EnzymeServiceProto.Enzyme.newBuilder()
-                            .setBaseSequenceInfo(CommonProto.BaseSequenceInfo.newBuilder()
-                                    .setId(enzyme.getId())
-                                    .setName(enzyme.getName())
-                                    .build())
-                            .setSequence(CommonProto.Sequence.newBuilder()
-                                    .setValue(enzyme.getSequence().getValue())
-                                    .build())
-                            .setUpperCut(enzyme.getUpperCut())
-                            .setLowerCut(enzyme.getLowerCut())
-                            .setEntityStatus(Status.OK.name())
-                            .build();
+                    grpcEnzyme = GrpcEnzymeMapper.toGrpcEnzyme(enzyme);
+                    response.addEnzyme(grpcEnzyme);
 
                 } catch (RestException e) {
-                    protoEnzyme = EnzymeServiceProto.Enzyme.newBuilder()
-                            .setBaseSequenceInfo(CommonProto.BaseSequenceInfo.newBuilder()
-                                    .setId(id)
-                                    .build())
-                            .setEntityStatus(Status.NOT_FOUND.name())
-                            .build();
+                    // do nothing
                 }
-
-                response.addEnzyme(protoEnzyme);
             }
 
             responseObserver.onNext(response.build());
             responseObserver.onCompleted();
+
         } catch (Exception e) {
             LOG.warning(e.getMessage());
-            responseObserver.onError(new Throwable(Status.INTERNAL_SERVER_ERROR.name()));
+            responseObserver.onError(Status.INTERNAL.asException());
         }
     }
 }

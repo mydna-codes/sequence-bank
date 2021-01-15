@@ -2,13 +2,13 @@ package codes.mydna.api.resources.grpc;
 
 import codes.mydna.exceptions.RestException;
 import codes.mydna.lib.Dna;
-import codes.mydna.lib.grpc.CommonProto;
 import codes.mydna.lib.grpc.DnaServiceGrpc;
 import codes.mydna.lib.grpc.DnaServiceProto;
-import codes.mydna.lib.mappers.grpc.GrpcUserMapper;
+import codes.mydna.lib.grpc.mappers.GrpcDnaMapper;
+import codes.mydna.lib.grpc.mappers.GrpcUserMapper;
 import codes.mydna.services.DnaService;
-import codes.mydna.status.Status;
 import com.kumuluz.ee.grpc.annotations.GrpcService;
+import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 
 import javax.enterprise.inject.spi.CDI;
@@ -25,36 +25,29 @@ public class DnaGrpcResource extends DnaServiceGrpc.DnaServiceImplBase {
         DnaService dnaService = CDI.current().select(DnaService.class).get();
 
         try {
+            DnaServiceProto.Dna grpcDna;
 
-            DnaServiceProto.Dna dnaResponse;
             try {
                 Dna dna = dnaService.getDna(request.getId(), GrpcUserMapper.fromGrpcUser(request.getUser()));
-                dnaResponse = DnaServiceProto.Dna.newBuilder()
-                        .setBaseSequenceInfo(CommonProto.BaseSequenceInfo.newBuilder()
-                                .setId(dna.getId())
-                                .setName(dna.getName())
-                                .build())
-                        .setSequence(CommonProto.Sequence.newBuilder()
-                                .setValue(dna.getSequence().getValue())
-                                .build())
-                        .setEntityStatus(Status.OK.toString())
-                        .build();
+                grpcDna = GrpcDnaMapper.toGrpcDna(dna);
+
             } catch (RestException e) {
-                dnaResponse = DnaServiceProto.Dna.newBuilder()
-                        .setEntityStatus(Status.NOT_FOUND.name())
-                        .build();
+                responseObserver.onError(Status.NOT_FOUND.asException());
+                return;
             }
 
             DnaServiceProto.DnaResponse response = DnaServiceProto.DnaResponse.newBuilder()
-                    .setDna(dnaResponse)
+                    .setDna(grpcDna)
                     .build();
+
+            LOG.info("ID: " + response.getDna().getBaseSequenceInfo().getId());
 
             responseObserver.onNext(response);
             responseObserver.onCompleted();
 
         } catch (Exception e) {
             LOG.warning(e.getMessage());
-            responseObserver.onError(new Throwable(Status.INTERNAL_SERVER_ERROR.name()));
+            responseObserver.onError(Status.INTERNAL.asException());
         }
     }
 

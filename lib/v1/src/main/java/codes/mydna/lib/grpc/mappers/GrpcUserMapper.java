@@ -1,4 +1,4 @@
-package codes.mydna.lib.mappers.grpc;
+package codes.mydna.lib.grpc.mappers;
 
 import codes.mydna.auth.common.enums.Role;
 import codes.mydna.auth.common.models.User;

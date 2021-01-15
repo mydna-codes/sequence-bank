@@ -21,5 +21,4 @@ message MultipleGenesResponse {
 message Gene {
   BaseSequenceInfo baseSequenceInfo = 1;
   Sequence sequence = 2;
-  string entityStatus = 3;
 }

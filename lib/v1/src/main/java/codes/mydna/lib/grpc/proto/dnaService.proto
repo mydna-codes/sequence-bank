@@ -21,5 +21,4 @@ message DnaResponse {
 message Dna {
   BaseSequenceInfo baseSequenceInfo = 1;
   Sequence sequence = 2;
-  string EntityStatus = 3;
 }
