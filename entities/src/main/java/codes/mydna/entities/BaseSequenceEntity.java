@@ -9,10 +9,10 @@ import javax.persistence.*;
 @MappedSuperclass
 public class BaseSequenceEntity extends BaseEntity {
 
-    @Column(name="OWNER_ID", updatable = false)
+    @Column(name = "OWNER_ID", updatable = false)
     private String ownerId;
 
-    @Column(name="ACCESS_TYPE")
+    @Column(name = "ACCESS_TYPE", nullable = false)
     @Enumerated(value = EnumType.STRING)
     private SequenceAccessType access;
 
@@ -36,9 +36,7 @@ public class BaseSequenceEntity extends BaseEntity {
     }
 
     public void setAccess(SequenceAccessType access) {
-        this.access = (access == null)
-                ? SequenceAccessType.PRIVATE
-                : access;
+        this.access = access;
     }
 
     public String getName() {

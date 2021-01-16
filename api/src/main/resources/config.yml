@@ -59,7 +59,7 @@ kumuluzee:
         - jndi-name: jdbc/sequence-bank-db
           file: db/db.changelog-master.xml
           startup:
-            drop-all: true
+            drop-all: false
             update: true
 
 keycloak:

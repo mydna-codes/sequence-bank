@@ -24,7 +24,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -106,6 +105,9 @@ public class DnaServiceImpl implements DnaService {
 
         DnaEntity dnaEntity = DnaMapper.toEntity(dna);
         dnaEntity.setOwnerId(user.getId());
+        dnaEntity.setAccess(dna.getAccess() == null
+                ? SequenceAccessType.PRIVATE
+                : dna.getAccess());
 
         Sequence insertedSequence = sequenceService.insertSequence(dna.getSequence(), SequenceType.DNA, user);
         dnaEntity.setSequence(SequenceMapper.toEntity(insertedSequence));
@@ -127,16 +129,27 @@ public class DnaServiceImpl implements DnaService {
         DnaEntity old = getDnaEntity(id, user);
         if (old == null) throw new NotFoundException(Dna.class, id);
 
-        // Only owner can update sequence
-        AuthorizationUtil.verifyOwner(old, user);
-
         DnaEntity entity = DnaMapper.toEntity(dna);
         entity.setId(id);
         entity.setCreated(old.getCreated());
         entity.setOwnerId(old.getOwnerId());
+        entity.setAccess(dna.getAccess());
+
+        // Check if entity's access will change
+        if(entity.getAccess() != null && entity.getAccess() != old.getAccess()) {
+
+            // If access will change, verify that action is permitted
+            AuthorizationUtil.verifyModification(dna.getAccess(), user);
+        }
 
         Sequence updatedSequence = sequenceService.updateSequence(dna.getSequence(), SequenceType.DNA, old.getSequence().getId(), user);
         entity.setSequence(SequenceMapper.toEntity(updatedSequence));
+
+        // dynamic update of base sequence
+        if(entity.getName() == null)
+            entity.setName(old.getName());
+        if(entity.getAccess() == null)
+            entity.setAccess(old.getAccess());
 
         em.getTransaction().begin();
         em.merge(entity);
@@ -154,9 +167,6 @@ public class DnaServiceImpl implements DnaService {
 
         if (entity == null)
             return false;
-
-        // Only owner can remove sequence
-        AuthorizationUtil.verifyOwner(entity, user);
 
         em.getTransaction().begin();
         em.remove(entity);

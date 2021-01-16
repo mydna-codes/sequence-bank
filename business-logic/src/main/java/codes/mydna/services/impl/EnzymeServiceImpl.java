@@ -106,6 +106,9 @@ public class EnzymeServiceImpl implements EnzymeService {
 
         EnzymeEntity enzymeEntity = EnzymeMapper.toEntity(enzyme);
         enzymeEntity.setOwnerId(user.getId());
+        enzymeEntity.setAccess(enzyme.getAccess() == null
+                ? SequenceAccessType.PRIVATE
+                : enzyme.getAccess());
 
         Sequence insertedSequence = sequenceService.insertSequence(enzyme.getSequence(), SequenceType.ENZYME, user);
         enzymeEntity.setSequence(SequenceMapper.toEntity(insertedSequence));
@@ -132,16 +135,27 @@ public class EnzymeServiceImpl implements EnzymeService {
         EnzymeEntity old = getEnzymeEntity(id, user);
         if (old == null) throw new NotFoundException(Enzyme.class, id);
 
-        // Only owner can update sequence
-        AuthorizationUtil.verifyOwner(old, user);
-
         EnzymeEntity entity = EnzymeMapper.toEntity(enzyme);
         entity.setId(id);
         entity.setCreated(old.getCreated());
         entity.setOwnerId(old.getOwnerId());
+        entity.setAccess(old.getAccess());
+
+        // Check if entity's access will change
+        if(entity.getAccess() != null && entity.getAccess() != old.getAccess()) {
+
+            // If access will change, verify that action is permitted
+            AuthorizationUtil.verifyModification(old.getAccess(), user);
+        }
 
         Sequence updatedSeq = sequenceService.updateSequence(enzyme.getSequence(), SequenceType.ENZYME, old.getSequence().getId(), user);
         entity.setSequence(SequenceMapper.toEntity(updatedSeq));
+
+        // dynamic update of base sequence
+        if(entity.getName() == null)
+            entity.setName(old.getName());
+        if(entity.getAccess() == null)
+            entity.setAccess(old.getAccess());
 
         // Dynamic update "upperCut"
         entity.setUpperCut(enzyme.getUpperCut() == null
@@ -169,9 +183,6 @@ public class EnzymeServiceImpl implements EnzymeService {
 
         if (entity == null)
             return false;
-
-        // Only owner can remove sequence
-        AuthorizationUtil.verifyOwner(entity, user);
 
         em.getTransaction().begin();
         em.remove(entity);

@@ -105,6 +105,9 @@ public class GeneServiceImpl implements GeneService {
 
         GeneEntity geneEntity = GeneMapper.toEntity(gene);
         geneEntity.setOwnerId(user.getId());
+        geneEntity.setAccess(gene.getAccess() == null
+                ? SequenceAccessType.PRIVATE
+                : gene.getAccess());
 
         Sequence insertSequence = sequenceService.insertSequence(gene.getSequence(), SequenceType.GENE, user);
         geneEntity.setSequence(SequenceMapper.toEntity(insertSequence));
@@ -126,16 +129,27 @@ public class GeneServiceImpl implements GeneService {
         GeneEntity old = getGeneEntity(id, user);
         if (old == null) throw new NotFoundException(Gene.class, id);
 
-        // Only owner can update sequence
-        AuthorizationUtil.verifyOwner(old, user);
-
         GeneEntity entity = GeneMapper.toEntity(gene);
         entity.setId(id);
         entity.setCreated(old.getCreated());
         entity.setOwnerId(old.getOwnerId());
+        entity.setAccess(old.getAccess());
+
+        // Check if entity's access will change
+        if(entity.getAccess() != null && entity.getAccess() != old.getAccess()) {
+
+            // If access will change, verify that action is permitted
+            AuthorizationUtil.verifyModification(old.getAccess(), user);
+        }
 
         Sequence updatedSequence = sequenceService.updateSequence(gene.getSequence(), SequenceType.GENE, old.getSequence().getId(), user);
         entity.setSequence(SequenceMapper.toEntity(updatedSequence));
+
+        // dynamic update of base sequence
+        if(entity.getName() == null)
+            entity.setName(old.getName());
+        if(entity.getAccess() == null)
+            entity.setAccess(old.getAccess());
 
         em.getTransaction().begin();
         em.merge(entity);
@@ -153,9 +167,6 @@ public class GeneServiceImpl implements GeneService {
 
         if (entity == null)
             return false;
-
-        // Only owner can remove sequence
-        AuthorizationUtil.verifyOwner(entity, user);
 
         em.getTransaction().begin();
         em.remove(entity);
