@@ -11,6 +11,7 @@ import codes.mydna.utils.QueryParametersBuilder;
 import com.kumuluz.ee.rest.beans.QueryParameters;
 import com.mjamsek.auth.keycloak.annotations.AuthenticatedAllowed;
 import com.mjamsek.auth.keycloak.annotations.PublicResource;
+import com.mjamsek.auth.keycloak.annotations.SecureResource;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import javax.annotation.PostConstruct;
@@ -28,6 +29,7 @@ import javax.ws.rs.core.UriInfo;
 @Tag(name = "Gene")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@SecureResource
 @RequestScoped
 public class GeneResource implements GeneResourceDefinition {
 
