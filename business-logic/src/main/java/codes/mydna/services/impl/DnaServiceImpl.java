@@ -133,6 +133,7 @@ public class DnaServiceImpl implements DnaService {
         DnaEntity entity = DnaMapper.toEntity(dna);
         entity.setId(id);
         entity.setCreated(old.getCreated());
+        entity.setOwnerId(old.getOwnerId());
 
         Sequence updatedSequence = sequenceService.updateSequence(dna.getSequence(), SequenceType.DNA, old.getSequence().getId(), user);
         entity.setSequence(SequenceMapper.toEntity(updatedSequence));

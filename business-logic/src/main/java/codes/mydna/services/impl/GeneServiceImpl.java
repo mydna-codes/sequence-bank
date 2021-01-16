@@ -132,6 +132,7 @@ public class GeneServiceImpl implements GeneService {
         GeneEntity entity = GeneMapper.toEntity(gene);
         entity.setId(id);
         entity.setCreated(old.getCreated());
+        entity.setOwnerId(old.getOwnerId());
 
         Sequence updatedSequence = sequenceService.updateSequence(gene.getSequence(), SequenceType.GENE, old.getSequence().getId(), user);
         entity.setSequence(SequenceMapper.toEntity(updatedSequence));

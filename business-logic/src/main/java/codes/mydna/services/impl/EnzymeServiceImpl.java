@@ -138,6 +138,7 @@ public class EnzymeServiceImpl implements EnzymeService {
         EnzymeEntity entity = EnzymeMapper.toEntity(enzyme);
         entity.setId(id);
         entity.setCreated(old.getCreated());
+        entity.setOwnerId(old.getOwnerId());
 
         Sequence updatedSeq = sequenceService.updateSequence(enzyme.getSequence(), SequenceType.ENZYME, old.getSequence().getId(), user);
         entity.setSequence(SequenceMapper.toEntity(updatedSeq));
