@@ -10,8 +10,13 @@ service DnaService {
 }
 
 message DnaRequest {
-  User user = 1;
-  string id = 2;
+  enum ServiceType {
+    NORMAL = 0;
+    LARGE_SCALE = 1;
+  }
+  ServiceType serviceType = 1;
+  User user = 2;
+  string id = 3;
 }
 
 message DnaResponse {
@@ -21,4 +26,8 @@ message DnaResponse {
 message Dna {
   BaseSequenceInfo baseSequenceInfo = 1;
   Sequence sequence = 2;
+}
+
+message ServiceType {
+
 }

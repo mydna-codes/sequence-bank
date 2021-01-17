@@ -1,5 +1,8 @@
 package codes.mydna.api.resources.grpc;
 
+import codes.mydna.auth.common.RoleAccess;
+import codes.mydna.auth.common.enums.Privilege;
+import codes.mydna.auth.common.models.User;
 import codes.mydna.exceptions.RestException;
 import codes.mydna.lib.Dna;
 import codes.mydna.lib.grpc.DnaServiceGrpc;
@@ -28,22 +31,37 @@ public class DnaGrpcResource extends DnaServiceGrpc.DnaServiceImplBase {
             DnaServiceProto.Dna grpcDna;
 
             try {
-                Dna dna = dnaService.getDna(request.getId(), GrpcUserMapper.fromGrpcUser(request.getUser()));
+                User user = GrpcUserMapper.fromGrpcUser(request.getUser());
+                Dna dna = dnaService.getDna(request.getId(), user);
                 grpcDna = GrpcDnaMapper.toGrpcDna(dna);
+
+                // Todo move threshold to etcd
+                // Check if sequence is long enough for large scale analysis service
+                if (grpcDna.getSequence().getValue().length() > 500) {
+
+                    // Verify that user can use this kind of service
+                    if (!RoleAccess.canAccess(Privilege.LARGE_SCALE_ANALYSIS, user)) {
+                        responseObserver.onError(Status.PERMISSION_DENIED.asException());
+                        return;
+                    }
+
+                    // FAILED_PRECONDITION -> Service that can handle long sequences should request this dna
+                    if (request.getServiceType() != DnaServiceProto.DnaRequest.ServiceType.LARGE_SCALE) {
+                        responseObserver.onError(Status.FAILED_PRECONDITION.asException());
+                        return;
+                    }
+                }
+
+                DnaServiceProto.DnaResponse response = DnaServiceProto.DnaResponse.newBuilder()
+                        .setDna(grpcDna)
+                        .build();
+
+                responseObserver.onNext(response);
+                responseObserver.onCompleted();
 
             } catch (RestException e) {
                 responseObserver.onError(Status.NOT_FOUND.asException());
-                return;
             }
-
-            DnaServiceProto.DnaResponse response = DnaServiceProto.DnaResponse.newBuilder()
-                    .setDna(grpcDna)
-                    .build();
-
-            LOG.info("ID: " + response.getDna().getBaseSequenceInfo().getId());
-
-            responseObserver.onNext(response);
-            responseObserver.onCompleted();
 
         } catch (Exception e) {
             LOG.warning(e.getMessage());

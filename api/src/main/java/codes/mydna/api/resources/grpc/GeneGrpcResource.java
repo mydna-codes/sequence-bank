@@ -22,11 +22,13 @@ public class GeneGrpcResource extends GeneServiceGrpc.GeneServiceImplBase {
 
     @Override
     public void getMultipleGenes(GeneServiceProto.MultipleGenesRequest request, StreamObserver<GeneServiceProto.MultipleGenesResponse> responseObserver) {
+
         GeneService geneService = CDI.current().select(GeneService.class).get();
 
         var response = GeneServiceProto.MultipleGenesResponse.newBuilder();
 
         try {
+            Logger.getLogger("nekns").info("GENENES");
             List<String> ids = request.getIdList();
 
             for (String id : ids) {
