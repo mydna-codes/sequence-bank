@@ -58,15 +58,17 @@ public class DnaGrpcResource extends DnaServiceGrpc.DnaServiceImplBase {
                         .setDna(grpcDna)
                         .build();
 
+                LOG.info("Retrieving response for dna with id: " + request.getId());
                 responseObserver.onNext(response);
                 responseObserver.onCompleted();
 
             } catch (RestException e) {
+                LOG.info("Dna with id " + request.getId() + " not found");
                 responseObserver.onError(Status.NOT_FOUND.asException());
             }
 
         } catch (Exception e) {
-            LOG.warning(e.getMessage());
+            LOG.warning("ERROR while processing DNA request: " + e.getMessage());
             responseObserver.onError(Status.INTERNAL.asException());
         }
     }
