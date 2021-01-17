@@ -23,6 +23,8 @@ public class EnzymeGrpcResource extends EnzymeServiceGrpc.EnzymeServiceImplBase 
     @Override
     public void getMultipleEnzymes(EnzymeServiceProto.MultipleEnzymesRequest request, StreamObserver<EnzymeServiceProto.MultipleEnzymesResponse> responseObserver) {
 
+        LOG.info("Received request for multiple enzymes");
+
         EnzymeService enzymeService = CDI.current().select(EnzymeService.class).get();
 
         var response = EnzymeServiceProto.MultipleEnzymesResponse.newBuilder();

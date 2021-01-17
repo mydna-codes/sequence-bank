@@ -25,6 +25,8 @@ public class DnaGrpcResource extends DnaServiceGrpc.DnaServiceImplBase {
     @Override
     public void getDna(DnaServiceProto.DnaRequest request, StreamObserver<DnaServiceProto.DnaResponse> responseObserver) {
 
+        LOG.info("Received request for dna sequence: " + request.getId());
+
         DnaService dnaService = CDI.current().select(DnaService.class).get();
 
         try {
