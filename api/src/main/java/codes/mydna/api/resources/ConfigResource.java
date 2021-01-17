@@ -1,7 +1,7 @@
 package codes.mydna.api.resources;
 
 import codes.mydna.auth.common.RealmRole;
-import codes.mydna.config.etcd.ConfigUserLimits;
+import codes.mydna.configurations.ConfigUserLimits;
 import com.mjamsek.auth.keycloak.annotations.RealmRolesAllowed;
 import com.mjamsek.auth.keycloak.annotations.SecureResource;
 

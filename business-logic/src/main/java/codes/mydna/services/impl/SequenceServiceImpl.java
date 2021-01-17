@@ -1,8 +1,8 @@
 package codes.mydna.services.impl;
 
 import codes.mydna.auth.common.models.User;
+import codes.mydna.configurations.UserLimits;
 import codes.mydna.entities.SequenceEntity;
-import codes.mydna.etcd.rbac.keycloak.UserLimits;
 import codes.mydna.exceptions.BadRequestException;
 import codes.mydna.exceptions.NotFoundException;
 import codes.mydna.lib.Sequence;
