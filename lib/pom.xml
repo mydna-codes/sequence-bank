@@ -11,8 +11,8 @@
         <version>0.1.0</version>
     </parent>
 
-    <artifactId>lib</artifactId>
-    <name>lib</name>
+    <artifactId>sequence-bank-lib</artifactId>
+    <name>sequence-bank-lib</name>
 
     <modules>
         <module>v1</module>
