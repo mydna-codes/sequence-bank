@@ -1,0 +1,24 @@
+syntax = "proto3";
+option java_package = "codes.mydna.lib.grpc";
+option java_outer_classname = "GeneServiceProto";
+option java_multiple_files = false;
+
+import "common.proto";
+
+service GeneService {
+  rpc getMultipleGenes(MultipleGenesRequest) returns (MultipleGenesResponse) {};
+}
+
+message MultipleGenesRequest {
+  User user = 1;
+  repeated string id = 2;
+}
+
+message MultipleGenesResponse {
+  repeated Gene gene = 1;
+}
+
+message Gene {
+  BaseSequenceInfo baseSequenceInfo = 1;
+  Sequence sequence = 2;
+}

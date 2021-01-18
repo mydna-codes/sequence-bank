@@ -18,6 +18,8 @@ public class EnzymeMapper {
             return null;
         Enzyme enzyme = new Enzyme();
         BaseSequenceMapper.fromEntity(entity, enzyme);
+        enzyme.setUpperCut(entity.getUpperCut());
+        enzyme.setLowerCut(entity.getLowerCut());
         return enzyme;
     }
 
@@ -26,6 +28,8 @@ public class EnzymeMapper {
             return null;
         EnzymeEntity entity = new EnzymeEntity();
         BaseSequenceMapper.toEntity(enzyme, entity);
+        entity.setUpperCut(enzyme.getUpperCut());
+        entity.setLowerCut(enzyme.getLowerCut());
         return entity;
     }
 

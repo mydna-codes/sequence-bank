@@ -1,0 +1,33 @@
+syntax = "proto3";
+option java_package = "codes.mydna.lib.grpc";
+option java_outer_classname = "DnaServiceProto";
+option java_multiple_files = false;
+
+import "common.proto";
+
+service DnaService {
+  rpc getDna(DnaRequest) returns (DnaResponse) {};
+}
+
+message DnaRequest {
+  enum ServiceType {
+    NORMAL = 0;
+    LARGE_SCALE = 1;
+  }
+  ServiceType serviceType = 1;
+  User user = 2;
+  string id = 3;
+}
+
+message DnaResponse {
+  Dna dna = 1;
+}
+
+message Dna {
+  BaseSequenceInfo baseSequenceInfo = 1;
+  Sequence sequence = 2;
+}
+
+message ServiceType {
+
+}

@@ -1,8 +1,10 @@
 package codes.mydna.api.resources;
 
+import codes.mydna.api.resources.definitions.DemoResourceDefinition;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+
 import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -12,17 +14,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-@RequestScoped
+@Path("demo")
+@Tag(name = "Other")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-@Path("demo")
-public class DemoResource {
+@RequestScoped
+public class DemoResource implements DemoResourceDefinition {
 
-    @GET
+    @Override
     public Response demo() {
-        StringBuilder content = new StringBuilder();
 
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("projectInfo.json")) {
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("projectInfo1.json")) {
+            StringBuilder content = new StringBuilder();
             if(inputStream != null){
                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
                 String line;
@@ -31,9 +34,11 @@ public class DemoResource {
                     content.append(System.lineSeparator());
                 }
             }
+            return Response.ok(content.toString()).build();
         } catch (IOException e) {
-            Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            return Response.serverError().build();
         }
-        return Response.ok(content.toString()).build();
+
     }
+
 }

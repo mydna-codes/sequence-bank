@@ -9,10 +9,11 @@ pipeline {
         DOCKER_CREDENTIALS     = "mydnacodes-docker-user"
         // Local variables
         DOCKER_IMAGE_TAG       = "mydnacodes/sequence-bank"
-        DOCKER_IMAGE_VERSION   = ""
         DOCKER_IMAGE           = ""
         COMMIT_AUTHOR          = ""
         COMMIT_MESSAGE         = ""
+        PROJECT_VERSION        = ""
+        PROJECT_ARTIFACT_ID    = ""
     }
 
     tools {
@@ -25,7 +26,8 @@ pipeline {
             steps {
                 script {
                     pom                  = readMavenPom file:"pom.xml"
-                    DOCKER_IMAGE_VERSION = pom.version
+                    PROJECT_VERSION      = pom.version
+                    PROJECT_ARTIFACT_ID  = pom.artifactId
                     COMMIT_MESSAGE       = sh script: "git show -s --pretty='%s'", returnStdout: true
                     COMMIT_AUTHOR        = sh script: "git show -s --pretty='%cn <%ce>'", returnStdout: true
                     COMMIT_AUTHOR        = COMMIT_AUTHOR.trim()
@@ -48,7 +50,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry("", DOCKER_CREDENTIALS) {
-                        dockerImage.push("$DOCKER_IMAGE_VERSION")
+                        dockerImage.push("$PROJECT_VERSION")
                         dockerImage.push("latest")
                     }
                 }
@@ -56,7 +58,7 @@ pipeline {
         }
         stage("Clean docker images") {
             steps {
-                sh "docker rmi $DOCKER_IMAGE_TAG:$DOCKER_IMAGE_VERSION"
+                sh "docker rmi $DOCKER_IMAGE_TAG:$PROJECT_VERSION"
                 sh "docker rmi $DOCKER_IMAGE_TAG:latest"
             }
         }
@@ -85,9 +87,12 @@ pipeline {
                     }
 
                     sh """ \
-                    sed -e 's+{{IMAGE_NAME}}+$DOCKER_IMAGE_TAG:$DOCKER_IMAGE_VERSION+g' \
+                    sed -e 's+{{IMAGE_NAME}}+$DOCKER_IMAGE_TAG:$PROJECT_VERSION+g' \
                         -e 's+{{NAMESPACE}}+$environment.namespace+g' \
                         -e 's+{{ENV_SUFFIX}}+$environment.suffix+g' \
+                        -e 's+{{VERSION}}+$PROJECT_VERSION+g' \
+                        -e 's+{{ENV_NAME}}+$environment.name+g' \
+                        -e 's+{{ENV_PROD}}+$environment.prod+g' \
                         .kube/sequence-bank.yaml > .kube/sequence-bank.tmp
                     """
                     sh "mv -f .kube/sequence-bank.tmp .kube/sequence-bank.yaml"
@@ -104,7 +109,18 @@ pipeline {
         }
         stage("Deploy application") {
             steps {
-
+                script {
+                    try {
+                        if (!(env.GIT_BRANCH.equals("prod") || env.GIT_BRANCH.equals("origin/prod"))) {
+                            withKubeConfig([credentialsId: KUBERNETES_CREDENTIALS]) {
+                                sh "kubectl delete deployments.apps -n mydnacodes sequence-bank-app"
+                            }
+                        }
+                    } catch (Exception e) {
+                        echo "Deployment has not been deleted."
+                        echo e.getMessage()
+                    }
+                }
                 withKubeConfig([credentialsId: KUBERNETES_CREDENTIALS]) {
                     sh "kubectl apply -f .kube/"
                 }
@@ -115,18 +131,18 @@ pipeline {
         success {
             slackSend (color: '#57BA57',
                        message: """[<${env.BUILD_URL}|Build ${env.BUILD_NUMBER}>] *SUCCESSFUL*\n
-                                  |Job: *${env.JOB_NAME}*\n
-                                  |Branch: ${GIT_BRANCH}
-                                  |Author: ${COMMIT_AUTHOR}
+                                  |Version: `${PROJECT_ARTIFACT_ID}:${PROJECT_VERSION}`\n
+                                  |Branch:  *${GIT_BRANCH}*
+                                  |Author:  ${COMMIT_AUTHOR}
                                   |Message: ${COMMIT_MESSAGE}""".stripMargin()
             )
         }
         failure {
             slackSend (color: '#BD0808',
                        message: """[<${env.BUILD_URL}|Build ${env.BUILD_NUMBER}>] *FAILED*\n
-                                  |Job: *${env.JOB_NAME}*\n
-                                  |Branch: ${GIT_BRANCH}
-                                  |Author: ${COMMIT_AUTHOR}
+                                  |Version: `${PROJECT_ARTIFACT_ID}:${PROJECT_VERSION}`\n
+                                  |Branch:  *${GIT_BRANCH}*
+                                  |Author:  ${COMMIT_AUTHOR}
                                   |Message: ${COMMIT_MESSAGE}""".stripMargin()
             )
         }

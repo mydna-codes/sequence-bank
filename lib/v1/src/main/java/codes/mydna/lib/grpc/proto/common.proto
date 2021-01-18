@@ -1,0 +1,22 @@
+syntax = "proto3";
+option java_package = "codes.mydna.lib.grpc";
+option java_outer_classname = "CommonProto";
+option java_multiple_files = false;
+
+message BaseSequenceInfo {
+  string id = 1;
+  string name = 2;
+  string access = 3;
+}
+
+message Sequence {
+  string value = 1;
+}
+
+message User {
+  bool isNull = 1;
+  string id = 2;
+  string username = 3;
+  string email = 4;
+  repeated string roles = 5;
+}

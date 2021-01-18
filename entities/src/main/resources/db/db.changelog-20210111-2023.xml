@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+
+    <changeSet author="DinMusic" id="add_security_columns_to_base_sequence_entity">
+        <addColumn tableName="dna_table">
+            <column name="owner_id" type="varchar(128)"/>
+            <column name="access_type" type="VARCHAR(32)"/>
+        </addColumn>
+        <addColumn tableName="enzyme_table">
+            <column name="owner_id" type="varchar(128)"/>
+            <column name="access_type" type="VARCHAR(32)"/>
+        </addColumn>
+        <addColumn tableName="gene_table">
+            <column name="owner_id" type="varchar(128)"/>
+            <column name="access_type" type="VARCHAR(32)"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 @ApplicationScoped
 public class StartupListener implements ServletContextListener {
 
-    private Logger LOG = Logger.getLogger(StartupListener.class.getSimpleName());
+    private static final Logger LOG = Logger.getLogger(StartupListener.class.getSimpleName());
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {

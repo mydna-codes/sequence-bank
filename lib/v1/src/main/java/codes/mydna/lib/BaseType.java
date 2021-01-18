@@ -5,7 +5,9 @@ import java.util.Date;
 public class BaseType {
 
     private String id;
+
     private Date created;
+
     private Date lastModified;
 
     public String getId() {

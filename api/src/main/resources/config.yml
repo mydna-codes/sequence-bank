@@ -4,17 +4,29 @@ kumuluzee:
   env:
     prod: false
     name: dev
+  dev:
+    scan-libraries:
+      - rest-lib
+      - sequence-bank-lib-v1
   server:
-    show-server-info: false
     base-url: http://localhost:8080
+    show-server-info: false
+    http:
+      port: 8080
   cors-filter:
     servlet:
       allow-origin: "*"
       supported-methods: "GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD"
-      exposed-headers: "X-Total-Count"
-  openapi:
+      exposed-headers: "X-Total-Count, Content-Type"
+  grpc:
+    server:
+      http:
+        port: 8081
+  openapi-mp:
     enabled: true
+    servers: http://localhost:8080
     ui:
+      mapping: /openapi/ui
       enabled: true
   health:
     servlet:
@@ -25,11 +37,17 @@ kumuluzee:
         type: liveness
         jndi-name: jdbc/sequence-bank-db
       disk-space-health-check:
-        threshold: 100000000
         type: liveness
+        threshold: 100000000
+  config:
+    namespace: env/dev
+    start-retry-delay-ms: 500
+    max-retry-delay-ms: 900000
+    etcd:
+      hosts: http://localhost:2379
   datasources:
     - jndi-name: jdbc/sequence-bank-db
-      connection-url: jdbc:postgresql://localhost:65432/sequence-bank
+      connection-url: jdbc:postgresql://localhost:5432/sequence-bank
       username: postgres
       password: postgres
       pool:
@@ -37,10 +55,34 @@ kumuluzee:
   migrations:
     enabled: true
     liquibase:
-      datasources:
+      changelogs:
         - jndi-name: jdbc/sequence-bank-db
-          changelog: db/db.changelog-master.xml
+          file: db/db.changelog-master.xml
           startup:
-            dropAll: false
+            drop-all: false
             update: true
 
+keycloak:
+  realm: not_set
+  auth-server-url: not_set
+  client-id: not_set
+  auth:
+    client-secret: not_set
+
+mydnacodes:
+  thresholds:
+    large-scale:
+      min-seq-length: 100000
+  limits:
+    guest:
+      max-dna-length: -1
+      max-gene-length: -1
+      max-enzyme-length: -1
+    reg:
+      max-dna-length: -1
+      max-gene-length: -1
+      max-enzyme-length: -1
+    pro:
+      max-dna-length: -1
+      max-gene-length: -1
+      max-enzyme-length: -1
