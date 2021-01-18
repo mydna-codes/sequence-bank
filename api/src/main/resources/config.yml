@@ -70,6 +70,9 @@ keycloak:
     client-secret: not_set
 
 mydnacodes:
+  thresholds:
+    large-scale:
+      min-seq-length: 100000
   limits:
     guest:
       max-dna-length: -1

@@ -10,6 +10,7 @@ import codes.mydna.lib.grpc.DnaServiceProto;
 import codes.mydna.lib.grpc.mappers.GrpcDnaMapper;
 import codes.mydna.lib.grpc.mappers.GrpcUserMapper;
 import codes.mydna.services.DnaService;
+import com.kumuluz.ee.configuration.utils.ConfigurationUtil;
 import com.kumuluz.ee.grpc.annotations.GrpcService;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
@@ -37,9 +38,12 @@ public class DnaGrpcResource extends DnaServiceGrpc.DnaServiceImplBase {
                 Dna dna = dnaService.getDna(request.getId(), user);
                 grpcDna = GrpcDnaMapper.toGrpcDna(dna);
 
-                // Todo move threshold to etcd
+                int threshold = ConfigurationUtil.getInstance()
+                        .getInteger("mydnacodes.thresholds.large-scale.min-seq-length")
+                        .orElse(100000);
+
                 // Check if sequence is long enough for large scale analysis service
-                if (grpcDna.getSequence().getValue().length() > 500) {
+                if (grpcDna.getSequence().getValue().length() > threshold) {
 
                     // Verify that user can use this kind of service
                     if (!RoleAccess.canAccess(Privilege.LARGE_SCALE_ANALYSIS, user)) {
@@ -58,12 +62,10 @@ public class DnaGrpcResource extends DnaServiceGrpc.DnaServiceImplBase {
                         .setDna(grpcDna)
                         .build();
 
-                LOG.info("Retrieving response for dna with id: " + request.getId());
                 responseObserver.onNext(response);
                 responseObserver.onCompleted();
 
             } catch (RestException e) {
-                LOG.info("Dna with id " + request.getId() + " not found");
                 responseObserver.onError(Status.NOT_FOUND.asException());
             }
 
