@@ -14,7 +14,7 @@ ENV KEYCLOAK_AUTH_CLIENTSECRET=not_set
 RUN mkdir /app
 WORKDIR /app
 
-ADD ./api/target/sequence-bank.jar /app
+ADD ./api/target /app
 
 EXPOSE 8080
 
