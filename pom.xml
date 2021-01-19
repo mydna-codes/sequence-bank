@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>codes.mydna</groupId>
+    <groupId>codes.mydna.sequence-bank</groupId>
     <artifactId>sequence-bank</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -33,9 +33,9 @@
         <!-- PostgreSQL -->
         <postgresql.version>42.2.18</postgresql.version>
 
-        <!-- Custom -->
-        <mydnacodes-rest-lib.version>1.0.2</mydnacodes-rest-lib.version>
-        <mydnacodes-auth-lib.version>1.0.0</mydnacodes-auth-lib.version>
+        <!-- MyDNACodes -->
+        <rest-lib.version>1.0.3-SNAPSHOT</rest-lib.version>
+        <auth-lib.version>1.0.1-SNAPSHOT</auth-lib.version>
 
         <!-- Plugins -->
         <liquibase.version>4.2.0</liquibase.version>
@@ -47,18 +47,18 @@
         <dependencies>
             <!-- Internal modules -->
             <dependency>
-                <groupId>codes.mydna</groupId>
+                <groupId>codes.mydna.sequence-bank</groupId>
                 <artifactId>sequence-bank-lib-v1</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>codes.mydna</groupId>
-                <artifactId>business-logic</artifactId>
+                <groupId>codes.mydna.sequence-bank</groupId>
+                <artifactId>sequence-bank-business-logic</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>codes.mydna</groupId>
-                <artifactId>entities</artifactId>
+                <groupId>codes.mydna.sequence-bank</groupId>
+                <artifactId>sequence-bank-entities</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
             </dependency>
 
@@ -148,21 +148,21 @@
 
             <!-- Nexus - REST lib -->
             <dependency>
-                <groupId>codes.mydna</groupId>
+                <groupId>codes.mydna.rest</groupId>
                 <artifactId>rest-lib</artifactId>
-                <version>${mydnacodes-rest-lib.version}</version>
+                <version>${rest-lib.version}</version>
             </dependency>
 
             <!-- Nexus - auth lib -->
             <dependency>
-                <groupId>codes.mydna</groupId>
+                <groupId>codes.mydna.auth</groupId>
                 <artifactId>auth-common</artifactId>
-                <version>${mydnacodes-auth-lib.version}</version>
+                <version>${auth-lib.version}</version>
             </dependency>
             <dependency>
-                <groupId>codes.mydna</groupId>
+                <groupId>codes.mydna.auth</groupId>
                 <artifactId>auth-keycloak</artifactId>
-                <version>${mydnacodes-auth-lib.version}</version>
+                <version>${auth-lib.version}</version>
             </dependency>
 
         </dependencies>

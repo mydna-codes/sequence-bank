@@ -5,19 +5,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>codes.mydna</groupId>
+        <groupId>codes.mydna.sequence-bank</groupId>
         <artifactId>sequence-bank</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>business-logic</artifactId>
+    <artifactId>sequence-bank-business-logic</artifactId>
 
-    <name>business-logic</name>
+    <name>sequence-bank-business-logic</name>
 
     <dependencies>
         <dependency>
-            <groupId>codes.mydna</groupId>
-            <artifactId>entities</artifactId>
+            <groupId>codes.mydna.sequence-bank</groupId>
+            <artifactId>sequence-bank-entities</artifactId>
         </dependency>
 
         <dependency>
@@ -50,11 +50,11 @@
         </dependency>
 
         <dependency>
-            <groupId>codes.mydna</groupId>
+            <groupId>codes.mydna.rest</groupId>
             <artifactId>rest-lib</artifactId>
         </dependency>
         <dependency>
-            <groupId>codes.mydna</groupId>
+            <groupId>codes.mydna.auth</groupId>
             <artifactId>auth-keycloak</artifactId>
         </dependency>
     </dependencies>

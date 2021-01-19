@@ -3,8 +3,8 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
+        <groupId>codes.mydna.sequence-bank</groupId>
         <artifactId>sequence-bank-lib</artifactId>
-        <groupId>codes.mydna</groupId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -21,7 +21,7 @@
             <artifactId>kumuluzee-grpc</artifactId>
         </dependency>
         <dependency>
-            <groupId>codes.mydna</groupId>
+            <groupId>codes.mydna.auth</groupId>
             <artifactId>auth-common</artifactId>
         </dependency>
     </dependencies>
@@ -40,7 +40,7 @@
                 <artifactId>protobuf-maven-plugin</artifactId>
                 <version>${protobuf-maven-plugin.version}</version>
                 <configuration>
-                    <protoSourceRoot>src/main/java/codes/mydna/lib/grpc/proto</protoSourceRoot>
+                    <protoSourceRoot>src/main/java/codes/mydna/sequence_bank/lib/grpc/proto</protoSourceRoot>
                     <protocArtifact>com.google.protobuf:protoc:3.5.1-1:exe:${os.detected.classifier}</protocArtifact>
                     <pluginId>grpc-java</pluginId>
                     <pluginArtifact>io.grpc:protoc-gen-grpc-java:1.15.1:exe:${os.detected.classifier}</pluginArtifact>

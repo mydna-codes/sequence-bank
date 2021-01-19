@@ -6,8 +6,8 @@
     <packaging>pom</packaging>
 
     <parent>
+        <groupId>codes.mydna.sequence-bank</groupId>
         <artifactId>sequence-bank</artifactId>
-        <groupId>codes.mydna</groupId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
