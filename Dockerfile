@@ -18,4 +18,4 @@ ADD ./api/target/sequence-bank.jar /app
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "sequence-bank.jar", "com.kumuluz.ee.EeApplication"]
+CMD ["java", "-cp", "classes:dependency/*", "com.kumuluz.ee.EeApplication"]
