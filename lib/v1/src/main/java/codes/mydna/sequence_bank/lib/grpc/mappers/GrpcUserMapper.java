@@ -2,7 +2,7 @@ package codes.mydna.sequence_bank.lib.grpc.mappers;
 
 import codes.mydna.auth.common.enums.Role;
 import codes.mydna.auth.common.models.User;
-import codes.mydna.lib.grpc.CommonProto;
+import codes.mydna.sequence_bank.lib.grpc.CommonProto;
 
 import java.util.List;
 import java.util.stream.Collectors;

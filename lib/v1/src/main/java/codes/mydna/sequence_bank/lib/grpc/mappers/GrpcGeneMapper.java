@@ -1,7 +1,7 @@
 package codes.mydna.sequence_bank.lib.grpc.mappers;
 
 import codes.mydna.sequence_bank.lib.Gene;
-import codes.mydna.lib.grpc.GeneServiceProto;
+import codes.mydna.sequence_bank.lib.grpc.GeneServiceProto;
 
 public class GrpcGeneMapper {
 

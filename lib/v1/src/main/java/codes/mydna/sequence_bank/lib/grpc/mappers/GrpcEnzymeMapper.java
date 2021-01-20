@@ -1,7 +1,7 @@
 package codes.mydna.sequence_bank.lib.grpc.mappers;
 
 import codes.mydna.sequence_bank.lib.Enzyme;
-import codes.mydna.lib.grpc.EnzymeServiceProto;
+import codes.mydna.sequence_bank.lib.grpc.EnzymeServiceProto;
 
 public class GrpcEnzymeMapper {
 

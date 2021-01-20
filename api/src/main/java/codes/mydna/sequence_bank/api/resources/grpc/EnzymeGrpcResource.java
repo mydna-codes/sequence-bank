@@ -2,8 +2,8 @@ package codes.mydna.sequence_bank.api.resources.grpc;
 
 import codes.mydna.rest.exceptions.RestException;
 import codes.mydna.sequence_bank.lib.Enzyme;
-import codes.mydna.lib.grpc.EnzymeServiceGrpc;
-import codes.mydna.lib.grpc.EnzymeServiceProto;
+import codes.mydna.sequence_bank.lib.grpc.EnzymeServiceGrpc;
+import codes.mydna.sequence_bank.lib.grpc.EnzymeServiceProto;
 import codes.mydna.sequence_bank.lib.grpc.mappers.GrpcEnzymeMapper;
 import codes.mydna.sequence_bank.lib.grpc.mappers.GrpcUserMapper;
 import codes.mydna.sequence_bank.services.EnzymeService;
